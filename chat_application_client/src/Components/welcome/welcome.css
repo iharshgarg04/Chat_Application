@@ -1,0 +1,16 @@
+.welcome-logo{
+    height: 25vw;
+}
+
+.welcome-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgba(0, 0, 0, 0.54);
+    flex: 3;
+    border-bottom: 5px solid rgba(30, 128, 204, 1);
+    border-radius: 20px;
+}

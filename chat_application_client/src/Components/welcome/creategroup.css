@@ -1,0 +1,20 @@
+.createGroups-container{
+    flex: 3;
+    align-self: center;
+    padding: 20px 10px;
+    margin: 10px;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid rgb(130, 126, 126);
+}
+
+.search-box{ 
+    flex: 1;
+    outline-width: 0;
+    border: none;
+    margin-left: 10px;
+    font-size: 1.25rem;
+    color: rgba(0, 0, 0, 0.54);
+}
