@@ -1,8 +1,40 @@
 const express = require("express");
 const User = require("../models/user");
+const expressAsyncHandler = require("express-async-handler");
+const generateToken = require("../config/generateToken");
 
-exports.loginController = async (req, res) => {};
-exports.signupController = async (req, res) => {
+
+exports.loginController = expressAsyncHandler(async (req, res) => {
+    const {name , password } = req.body;
+
+    if(!name || !password ){
+        return res.status(400).send({
+            success:false,
+            message:"All fields are required",
+        })
+    }
+
+    const user = await User.findOne({name});
+    if(user && (await user.matchPassword(password))){
+        const response = {
+            _id:user._id,
+            name : user.name,
+            email:user.email,
+            isAdmin:user.isAdmin,
+            token:generateToken(user._id)
+        };
+        console.log(response);
+        res.json(response);
+    }
+    else{
+        res.send({
+            success:false,
+            message:"User is not LogedIn"
+        })
+    }
+
+});
+exports.signupController = expressAsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
@@ -28,11 +60,19 @@ exports.signupController = async (req, res) => {
     });
   }
 
-  const user = User.create({ name, email, password });
+  const user = await User.create({ 
+        name, 
+        email, 
+        password,
+    });
 
-  return res.status(200).json({
-    success: true,
-    user,
-    message: "User is registered Successfully",
-  });
-};
+    if(user){
+        res.status(200).json({
+            _id:user._id,
+            name:user.name,
+            email,
+            isAdmin:user.isAdmin,
+            token:generateToken(user._id),
+        })
+    }
+});

@@ -22,6 +22,7 @@ const connectDb = async()=>{
     }
     catch(error){
         console.log("Error connecting to dataBase");
+        console.log(error);
     }
 };
 connectDb();
