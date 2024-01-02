@@ -1,30 +1,32 @@
 import React from "react";
 import Form from "../../Components/LoginPage/Form";
-import { TextField, Button } from "@mui/material";
-import "./login.css";
-import {  useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import "./login.css"; 
+
+
 
 const LoginForm = () => {
-
-  const navigate = useNavigate();
 
   return (
     <Form>
       <h1>Login</h1>
       <TextField
         className="input"
-        type="name"
-        id="outlined-basic"
+        type="text"
+        id="outlined-username"
         label="UserName"
         variant="outlined"
+        name = "username"
       />
       <TextField
         className="input"
         type="password"
-        id="outlined-basic"
+        id="outlined-password"
         label="Password"
         variant="outlined"
+        name = "password"
       />
       <Button  className="button" variant="contained"
         sx={{
@@ -37,8 +39,8 @@ const LoginForm = () => {
         Login
       </Button>
       <p className="loginspan">
-        Do not have an account ?<Link to='/signup'>
-        <span>sign up</span>
+        Do not have an account ? <Link to='/signup'>
+        <span>Sign up</span>
         </Link>
       </p>
     </Form>

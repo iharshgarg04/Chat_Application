@@ -1,7 +1,6 @@
 import React from 'react'
 import './conersationBox.css'
 import { useNavigate } from 'react-router-dom'
-import { motion } from "framer-motion"
 
 const ConversationBox = ({props}) => {
   const navigate = useNavigate();

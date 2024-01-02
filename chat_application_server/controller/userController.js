@@ -8,7 +8,7 @@ exports.loginController = expressAsyncHandler(async (req, res) => {
     const {name , password } = req.body;
 
     if(!name || !password ){
-        return res.status(400).send({
+        return res.status(403).send({
             success:false,
             message:"All fields are required",
         })

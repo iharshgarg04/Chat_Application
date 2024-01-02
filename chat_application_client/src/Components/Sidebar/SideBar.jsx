@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
-import './sidebar.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import NightlightRoundIcon from '@mui/icons-material/NightlightRound';
 import SearchIcon from '@mui/icons-material/Search';
-import { IconButton } from '@mui/material';
 import ConversationBox from '../conversationItems/ConversationBox';
 import { useNavigate } from 'react-router-dom';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../../Features/themeslice';
+import './sidebar.css';
+import { IconButton } from '@mui/material';
 
 const SideBar = () => {
     const navigate = useNavigate();
@@ -24,12 +24,12 @@ const SideBar = () => {
         timeStamp:"today",
     },
     {
-        name:"Harsh",
+        name:"Harsh1",
         lastMessage:"Last Message #1",
         timeStamp:"today",
     },
     {
-        name:"Harsh",
+        name:"Harsh2",
         lastMessage:"Last Message #1",
         timeStamp:"today",
     },
@@ -41,7 +41,7 @@ const SideBar = () => {
         <div className={"sb-header " + (lighttheme?"" :"dark")}>
             <div>
                 <IconButton>
-                    <AccountCircleIcon className={'icon ' + (lighttheme?"" : 'dark')} />    
+                    <AccountCircleIcon />    
                 </IconButton>
             </div>
             <div className='other-icons'>
