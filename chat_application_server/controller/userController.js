@@ -24,13 +24,13 @@ exports.loginController = expressAsyncHandler(async (req, res) => {
             token:generateToken(user._id)
         };
         console.log(response);
-        res.json(response);
+        res.status(200).json(response);
     }
     else{
-        res.send({
-            success:false,
-            message:"User is not LogedIn"
-        })
+      res.status(403).send({
+        success:false,
+        message:"User not found"
+      })
     }
 
 });
