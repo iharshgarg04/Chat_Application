@@ -6,3 +6,7 @@
 .App{
   min-height: 100vh;
 }
+
+.user-container{
+  flex: 3;
+}

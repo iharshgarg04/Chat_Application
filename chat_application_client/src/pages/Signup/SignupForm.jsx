@@ -35,7 +35,7 @@ const SignupForm = () => {
       console.log(response);
       if (response.status === 200) {
         toast.success("Signup Successful");
-        Cookies.set("userData", JSON.stringify(response));
+        Cookies.set("userData", JSON.stringify(response),{expires: 7 });
         navigate("/app/welcome");
       } else {
         toast.error("Signup failed. Please try again.");
@@ -105,7 +105,7 @@ const SignupForm = () => {
           </Button>
           <p className="singupspan">
             Already have an account ?{" "}
-            <Link to="/login">
+            <Link to="/">
               <span>login</span>
             </Link>
           </p>

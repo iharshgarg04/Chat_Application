@@ -39,7 +39,7 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         toast.success("Login Successful");
-        Cookies.set("userData", JSON.stringify(response));
+        Cookies.set("userData", JSON.stringify(response),{expires:7});
         navigate("/app/welcome");
       } else {
         toast.error("Login failed. Please try again.");
