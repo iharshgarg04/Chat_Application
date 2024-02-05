@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import User from "../../Components/User";
-import ConversationBox from "../../Components/conversationItems/ConversationBox";
 import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -36,8 +35,6 @@ const Users = () => {
   },[refresh])
   
   return (
-
-
     <User>
       <div className={"ug-header"}>
         <img
@@ -61,6 +58,7 @@ const Users = () => {
       {users.map((user,index) => {
         return (
           <div className="ug-list"
+          key={index}
           onClick={()=>{
             console.log("Creating chat with ", user.name);
 
@@ -76,7 +74,9 @@ const Users = () => {
               },
               config
             );
-
+            console.log("dispatching");
+            setRefresh(!refresh);
+            console.log("dispatched");
           }}
           >
             <p className={"con-icon"}>{user.name[0]}</p>

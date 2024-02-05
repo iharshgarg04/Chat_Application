@@ -5,6 +5,7 @@
     flex: 1;
     background-color: #f4f5f8;
 }
+
 .sb-header{
     padding: 10px 8px;
     display: flex;
@@ -31,7 +32,11 @@
     margin-left: 12px;
 }
 .sb-conversation{
+    overflow-x: scroll;
     flex: 1;
+}
+.sb-conversation::-webkit-scrollbar {
+    display: none;
 }
 
 .dark{

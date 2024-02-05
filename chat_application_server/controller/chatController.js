@@ -2,12 +2,14 @@ const expressAsyncHandler = require("express-async-handler");
 const Chat = require("../models/chat");
 const User = require("../models/user");
 
+
+
 exports.accessChat = expressAsyncHandler(async (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {
     console.log("userId Not found");
-    return res.sendStatus(400);
+    res.sendStatus(400);
   }
 
   var isChat = await Chat.find({
@@ -20,7 +22,7 @@ exports.accessChat = expressAsyncHandler(async (req, res) => {
     .populate("users", "-password")
     .populate("latestMessage");
 
-  res.send(isChat);
+  // res.send(isChat);
 
   isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
@@ -45,6 +47,7 @@ exports.accessChat = expressAsyncHandler(async (req, res) => {
         "-password"
       );
       res.status(200).json(FullChat);
+      
     } catch (error) {
       res.status(400);
       console.log(error.message)
@@ -65,10 +68,12 @@ exports.fetchChats = expressAsyncHandler(async (req, res) => {
             path:"latestMessage.sender",
             select:"name email",
         });
-        res.status(200).send(results);
+        res.status(200).json(results);
     })
-  } catch (error) {
-    res.status(400);
+  }catch(error) {
+    res.status(400).json({
+      success:false,
+    });
     console.log(error.message);
   }
 });

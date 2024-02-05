@@ -4,7 +4,6 @@ import { motion } from "framer-motion"
 
 
 const Messageother = ({props}) => {
-  // const data = {name:"harsh" , timestamp:"12:09",message:"Hello harsh!! How r u"}
   return (
     <motion.div whileHover={{scale:1.04}} className='message-others-con'>
       <div className='message-other-icon'>
@@ -17,9 +16,6 @@ const Messageother = ({props}) => {
         <div className='message-other-message'>
           {props.content}
         </div>
-        {/* <div className='message-other-time'>
-          {data.timestamp}
-        </div> */}
       </div>
     </motion.div>
   )

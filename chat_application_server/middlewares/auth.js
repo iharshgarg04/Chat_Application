@@ -14,12 +14,14 @@ exports.protect  = expressAsyncHandler(async(req,res,next)=>{
             res.status(401);
             console.log(error);
             console.log("Not Authorized , token failed" );
+            return res.json({ error: 'Not Authorized, token failed' });
         }
     }
 
     if(!token){
         res.status(401);
         console.log("Not Authorized , token failed" );
+        return res.json({ error: 'Not Authorized, token missing' });
     }
 
 })
