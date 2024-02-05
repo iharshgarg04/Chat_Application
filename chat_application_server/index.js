@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const mongoose = require('mongoose');
 const userRoutes = require("./routes/userRoutes")
 const chatRoutes = require("./routes/chatRoutes")
+const messageRoutes = require("./routes/messageRoutes");
 const cors = require('cors');
 
 const app = express();
@@ -21,6 +22,7 @@ app.get('/',(req,res)=>{
 
 app.use("/user",userRoutes);
 app.use("/chat",chatRoutes);
+app.use("/message",messageRoutes);
 
 const connectDb = async()=>{
     try{

@@ -4,6 +4,20 @@ const Message = require('../models/message');
 const Chat = require("../models/chat");
 const User = require("../models/user");
 
+
+exports.allMessages = expressAsyncHandler(async (req, res) => {
+    try {
+      const messages = await Message.find({ chat: req.params.chatId })
+        .populate("sender", "name email")
+        .populate("reciever")
+        .populate("chat");
+      res.json(messages);
+    } catch (error) {
+      res.status(400);
+      throw new Error(error.message);
+    }
+  });
+
 exports.sendMessage = expressAsyncHandler(async(req,res)=>{
 
     const {content , chatId} = req.body;
