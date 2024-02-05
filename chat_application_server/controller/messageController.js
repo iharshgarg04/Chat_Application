@@ -12,11 +12,12 @@ exports.allMessages = expressAsyncHandler(async (req, res) => {
         .populate("reciever")
         .populate("chat");
       res.json(messages);
+      console.log(messages);
     } catch (error) {
       res.status(400);
-      throw new Error(error.message);
+      console.log(error);
     }
-  });
+});
 
 exports.sendMessage = expressAsyncHandler(async(req,res)=>{
 
@@ -38,11 +39,10 @@ exports.sendMessage = expressAsyncHandler(async(req,res)=>{
         var message = await Message.create(newMessage);
         console.log(message);
 
-        await message.populate("sender")
-        .populate("chat")
-        .populate("reciever")
-        .execpopulate();
-
+        message = await message.populate("sender", "name pic");
+        message = await message.populate("chat");
+        message = await message.populate("reciever");
+    
         await User.populate(message,{
             path:"chat.users",
             Select :'name email',

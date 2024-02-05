@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
@@ -14,10 +14,12 @@ import "./sidebar.css";
 import { IconButton } from "@mui/material";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { myContext } from "../Main/MainContainer";
 
 const SideBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { refresh, setRefresh } = useContext(myContext);
   const lighttheme = useSelector((state) => state.themeKey);
   const [conversation, setConversation] = useState([]);
 
@@ -37,7 +39,7 @@ const SideBar = () => {
       console.log("Data refresed in sidebar", response.data);
       setConversation(response.data);
     });
-  },[]);
+  },[refresh]);
 
   return (
     <div className={"sidebar"}>
@@ -103,6 +105,7 @@ const SideBar = () => {
                 key={index}
                 onClick={()=>{
                   console.log("Refresed fired from sidebar");
+                  setRefresh(!refresh);
                 }} 
               >
                 <div 
@@ -121,7 +124,18 @@ const SideBar = () => {
           }
           else{
             return(
-              <div className="conversation-container">
+              <div
+                key={index}
+                className="conversation-container"
+                onClick={() => {
+                  navigate(
+                    "chat/" +
+                      conversation._id +
+                      "&" +
+                      conversation.users[1].name
+                  );
+                }}
+              >
                 <p className="con-icon">{conversation.users[1].name[0]}</p>
                 <p className="con-title">{conversation.users[1].name}</p>
                 <p className="con-lastMessage">{conversation.lastMessage.content}</p>

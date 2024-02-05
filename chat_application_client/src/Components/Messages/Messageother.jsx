@@ -3,23 +3,23 @@ import './message.css'
 import { motion } from "framer-motion"
 
 
-const Messageother = () => {
-  const data = {name:"harsh" , timestamp:"12:09",message:"Hello harsh!! How r u"}
+const Messageother = ({props}) => {
+  // const data = {name:"harsh" , timestamp:"12:09",message:"Hello harsh!! How r u"}
   return (
     <motion.div whileHover={{scale:1.04}} className='message-others-con'>
       <div className='message-other-icon'>
-          <p>{data.name[0]}</p>
+          <p>{props.sender.name[0]}</p>
       </div>
       <div className='message-other-container'>
         <div className='message-other-title'>
-          {data.name}
+          {props.sender.name}
         </div>
         <div className='message-other-message'>
-          {data.message}
+          {props.content}
         </div>
-        <div className='message-other-time'>
+        {/* <div className='message-other-time'>
           {data.timestamp}
-        </div>
+        </div> */}
       </div>
     </motion.div>
   )

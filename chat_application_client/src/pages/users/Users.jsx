@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import User from "../../Components/User";
 import ConversationBox from "../../Components/conversationItems/ConversationBox";
 import { IconButton } from "@mui/material";
@@ -8,11 +8,12 @@ import logo from "../../assests/chat.png";
 import "./users.css";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { myContext } from "../../Components/Main/MainContainer";
 
 const Users = () => {
 
   const [users, setusers] = useState([]);
-
+  const { refresh, setRefresh } = useContext(myContext);
   const userData = JSON.parse(Cookies.get("userData"));
   console.log(userData);
 
@@ -32,7 +33,7 @@ const Users = () => {
         console.log("User refresed in user panel");
         setusers(data.data);
     })
-  },[])
+  },[refresh])
   
   return (
 
@@ -44,7 +45,9 @@ const Users = () => {
           style={{ height: "2rem", width: "2rem", marginLeft: "10px" }}
         />
         <p className={"ug-title"}>Available Users</p>
-        <IconButton className={"icon"}>
+        <IconButton className={"icon"} onClick={()=>{
+          setRefresh(!refresh);
+        }}>
           <RefreshIcon />
         </IconButton>
       </div>
