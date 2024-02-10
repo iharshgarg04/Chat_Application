@@ -7,8 +7,6 @@ const messageRoutes = require("./routes/messageRoutes");
 const cors = require('cors');
 const { Server, Socket } = require('socket.io');
 
-
-
 const app = express();
 app.use(express.json());
 app.use(cors({
@@ -61,13 +59,13 @@ io.on("connection",(socket)=>{
     });
 
     socket.on("new message",(newMessageStatus)=>{
-        var chat = newMessageStatus.chat;
+        const chat = newMessageStatus.chat;
         if(!chat.users){
-            return console.log("chat users not defines")
+            return console.log("chat users not defined")
         }
         chat.users.forEach((user) => {
             if(user._id == newMessageStatus.sender._id) return;
-            socket.in(user._id).emit("message received",newMessageRecieved);
+            socket.in(user._id).emit("message received", newMessageRecieved)
         });
     })
 })

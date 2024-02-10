@@ -8,7 +8,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { Backdrop, CircularProgress } from "@mui/material";
-
+import './login.css'
 
 
 const LoginForm = () => {
@@ -81,6 +81,13 @@ const LoginForm = () => {
         label="UserName"
         variant="outlined"
         name = "name"
+        sx={{
+          "& .MuiOutlinedInput-root.Mui-focused": {
+            "& > fieldset": {
+      borderColor: "#e8505b",
+            }
+          },
+        }}
       />
       <TextField
       onChange={handleInputChange}
@@ -90,20 +97,27 @@ const LoginForm = () => {
         label="Password"
         variant="outlined"
         name = "password"
+        sx={{
+          "& .MuiOutlinedInput-root.Mui-focused": {
+            "& > fieldset": {
+      borderColor: "#e8505b"
+            }
+          }
+        }}
       />
       <Button onClick={handleSubmit}  className="button" variant="contained"
         sx={{
-            backgroundColor:'#4e416cff',
+            backgroundColor:'#e8505b',
             '&:hover':{
-                backgroundColor:'#4e416cff'
+                backgroundColor:'#e8505b'
             }
         }}
       >
         Login
       </Button>
       <p className="loginspan">
-        Do not have an account ? <Link to='/signup'>
-        <span>Sign up</span>
+        Do not have an account?<Link to='/signup'>
+        <span> sign up</span>
         </Link>
       </p>
     </Form>

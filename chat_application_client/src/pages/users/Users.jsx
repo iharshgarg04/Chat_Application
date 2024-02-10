@@ -3,17 +3,20 @@ import User from "../../Components/User";
 import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import logo from "../../assests/chat.png";
+import logo from "../../assests/chating.svg";
 import "./users.css";
 import Cookies from "js-cookie";
-import axios from "axios";
+import axios from "axios"
+import { refreshSidebarfun } from "../../Features/refreshSidebar";
 import { myContext } from "../../Components/Main/MainContainer";
+import { useDispatch } from "react-redux";
 
 const Users = () => {
 
   const [users, setusers] = useState([]);
   const { refresh, setRefresh } = useContext(myContext);
   const userData = JSON.parse(Cookies.get("userData"));
+  const dispatch = useDispatch();
   console.log(userData);
 
   if(!userData){
@@ -73,9 +76,10 @@ const Users = () => {
                 userId:user._id,
               },
               config
-            );
+            ).then(()=>{
+              setRefresh(!refresh)
+            });
             console.log("dispatching");
-            setRefresh(!refresh);
             console.log("dispatched");
           }}
           >

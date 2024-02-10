@@ -11,6 +11,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { myContext } from "../Main/MainContainer";
+import io from "socket.io-client";
+
+let socket;
 
 const ChatArea = () => {
 
@@ -23,7 +26,13 @@ const ChatArea = () => {
   const userData = JSON.parse(Cookies.get("userData"));
   const [allMessages, setAllMessages] = useState([]);
   const [loaded, setloaded] = useState(false);
+  const [socketConnectionStatus, setSocketConnectionStatus] = useState(false);
+  const [allMessagesCopy, setAllMessagesCopy] = useState([]);
+
+  const ENDPOINT = 'http://localhost:5000'
+
   const sendMessage = () => {
+    var data =null;
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
@@ -37,10 +46,37 @@ const ChatArea = () => {
         },
         config
       )
-      .then(({ data }) => {
+      .then(({ response }) => {
+        data = response;
         console.log("Message Fired");
       });
+      socket.emit("newMessage",data);
   };
+
+  useEffect(()=>{
+    socket = io(ENDPOINT);
+    socket.emit("setup",userData);
+    socket.on("connection",()=>{
+      setSocketConnectionStatus(!socketConnectionStatus)
+    })
+    
+    return () => {
+      socket.off("connection");
+    };
+  },[])
+
+  useEffect(()=>{
+    socket.on("message received",(newMessage)=>{
+      if(!allMessagesCopy || allMessagesCopy._id !== newMessage._id){
+
+      }else{
+        setAllMessages([...allMessages],newMessage)
+      }
+    })
+    return () => {
+      socket.off("message received");
+    };
+  },[allMessages,allMessagesCopy])
 
   useEffect(() => {
     console.log("Users refreshed");
@@ -53,8 +89,10 @@ const ChatArea = () => {
       .then(({ data }) => {
         setAllMessages(data);
         setloaded(true);
+        socket.emit("join chat",chat_id);
       });
-  }, [refresh,chat_id, userData.data.token]);
+      setAllMessagesCopy(allMessages);
+  }, [refresh,chat_id, userData.data.token,allMessages]);
 
   if (!loaded) {
     return (

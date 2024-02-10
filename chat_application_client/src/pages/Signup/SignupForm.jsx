@@ -71,6 +71,13 @@ const SignupForm = () => {
             label="UserName"
             variant="outlined"
             name="name"
+            sx={{
+              "& .MuiOutlinedInput-root.Mui-focused": {
+                "& > fieldset": {
+          borderColor: "#e8505b",
+                }
+              },
+            }}
           />
           <TextField
             onChange={handleInputChange}
@@ -80,6 +87,13 @@ const SignupForm = () => {
             label="Email"
             variant="outlined"
             name="email"
+            sx={{
+              "& .MuiOutlinedInput-root.Mui-focused": {
+                "& > fieldset": {
+          borderColor: "#e8505b",
+                }
+              },
+            }}
           />
           <TextField
             onChange={handleInputChange}
@@ -95,9 +109,9 @@ const SignupForm = () => {
             className="button"
             variant="contained"
             sx={{
-              backgroundColor: "#4e416cff",
+              backgroundColor: "#e8505b",
               "&:hover": {
-                backgroundColor: "#4e416cff",
+                backgroundColor: "#e8505b",
               },
             }}
           >
