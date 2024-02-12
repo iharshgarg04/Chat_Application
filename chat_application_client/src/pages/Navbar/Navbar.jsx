@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assests/slogo.jpg";
+import logo from "../../assests/welcome.svg";
 import "./Navbar.css";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { IconButton } from "@mui/material";

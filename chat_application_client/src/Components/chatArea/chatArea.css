@@ -1,14 +1,18 @@
 .chatArea-container{
+    margin-left: 10px;
+    margin-top: 10px;
     display: flex;
     flex: 3;
     flex-direction: column;
 }
 
 .chatArea-header{
+    border-top-right-radius: 26px;
+    border-top-left-radius: 26px;
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: white;
+    background-color: #E1E1E1;
     padding: 10px 10px;
 }
 
@@ -47,16 +51,29 @@
 }
 
 
-.messages-container{
-    background: url('../../assests/doodle.jpg');
+.messages-container {
     background-size: contain;
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
     scrollbar-width: none;
-    margin-top: 20px;
-    
+}
+
+.messages-container::before {
+    filter: blur(0.5px);
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('../../assests/doodle.jpg');
+    background-size: contain;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .messages-container::-webkit-scrollbar{
@@ -64,9 +81,14 @@
 }
 
 .text-input-area{
-    border-top: 2px solid grey;
     display: flex;
     padding: 10px 10px;
+    margin: 2px 4px;
+    background-color: #f6f7fbff;
+    border-radius: 25px;
+}
+.text-input-area input{
+    background-color: #f6f7fbff;
 }
 .search-box{ 
     flex: 1;

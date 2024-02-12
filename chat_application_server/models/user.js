@@ -15,6 +15,10 @@ const userModel = mongoose.Schema(
       type: String,
       required: true,
     },
+    avatarImage: {
+      type: String,
+      default: ''
+    },
   },
   {
     timestamp: true,

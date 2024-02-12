@@ -39,28 +39,44 @@ const SideBar = () => {
       console.log("Data refresed in sidebar", response.data);
       setConversation(response.data);
     });
-  },[refresh]);
+  }, [refresh]);
 
   return (
     <div className={"sidebar"}>
       <div className={"sb-header " + (lighttheme ? "" : "dark")}>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            color: "rgba(0, 0, 0, 0.54)",
+            fontWeight: "bolder",
+          }}
+        >
+          {/* <div className="avatar-box">
+            <img
+              src={`data:image/svg+xml;base64,${userData.data.avatarImage}`}
+              alt="user avatar"
+            />
+          </div> */}
           <IconButton>
             <AccountCircleIcon />
           </IconButton>
+          <p style={{ textTransform: "uppercase" }}>{userData.data.name}</p>
         </div>
         <div className="other-icons">
           <IconButton
+            className="iconshadow"
             onClick={() => {
               navigate("users");
             }}
           >
             <PersonAddIcon className={"icon " + (lighttheme ? "" : "dark")} />
           </IconButton>
-          <IconButton>
+          <IconButton className="iconshadow">
             <GroupAddIcon className={"icon " + (lighttheme ? "" : "dark")} />
           </IconButton>
           <IconButton
+            className="iconshadow"
             onClick={() => {
               navigate("create-groups");
             }}
@@ -68,6 +84,7 @@ const SideBar = () => {
             <AddCircleIcon className={"icon " + (lighttheme ? "" : "dark")} />
           </IconButton>
           <IconButton
+            className="iconshadow"
             onClick={() => {
               dispatch(toggleTheme());
             }}
@@ -95,35 +112,48 @@ const SideBar = () => {
         </div>
       </div>
       <div className={"sb-conversation " + (lighttheme ? "" : "dark")}>
-        {conversation.map((conversation,index) => {
-          if(conversation.users.length===1){
-            return <div key={index}></div>
+        {conversation.map((conversation, index) => {
+          if (conversation.users.length === 1) {
+            return <div key={index}></div>;
           }
-          if(conversation.lastMessage === undefined){
+          if (conversation.lastMessage === undefined) {
             return (
               <div
                 key={index}
-                onClick={()=>{
+                onClick={() => {
                   console.log("Refresed fired from sidebar");
                   setRefresh(!refresh);
-                }} 
+                }}
               >
-                <div 
+                <div
                   key={index}
                   className="conversation-container"
-                  onClick={()=>{
-                    navigate("chat/" + conversation._id + "&" + conversation.users[1].name)
+                  onClick={() => {
+                    navigate(
+                      "chat/" +
+                        conversation._id +
+                        "&" +
+                        conversation.users[1].name +
+                        "&" +
+                        conversation.users[1].avatarImage
+                    );
                   }}
                 >
-                  <p className="con-icon">{conversation.users[1].name[0]}</p>
+                  <div className="avatar-box ">
+                    <img
+                      src={`data:image/svg+xml;base64,${conversation.users[1].avatarImage}`}
+                      alt="user avatar"
+                    />
+                  </div>
                   <p className="con-title">{conversation.users[1].name}</p>
-                  <p className="con-lastMessage">No previous Messages, click here to start a new chat</p>
+                  <p className="con-lastMessage">
+                    No previous Messages, click here to start a new chat
+                  </p>
                 </div>
               </div>
             );
-          }
-          else{
-            return(
+          } else {
+            return (
               <div
                 key={index}
                 className="conversation-container"
@@ -138,9 +168,11 @@ const SideBar = () => {
               >
                 <p className="con-icon">{conversation.users[1].name[0]}</p>
                 <p className="con-title">{conversation.users[1].name}</p>
-                <p className="con-lastMessage">{conversation.lastMessage.content}</p>
+                <p className="con-lastMessage">
+                  {conversation.lastMessage.content}
+                </p>
               </div>
-            )
+            );
           }
         })}
       </div>

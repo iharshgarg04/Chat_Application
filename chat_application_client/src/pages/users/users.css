@@ -1,8 +1,16 @@
+
 .ug-header{
     display: flex;
+    background: #E1E1E1;
     justify-content: space-between;
+    display: flex;
+    height: 60px;
+    align-items: center;
 }
-
+.ug-title{
+    font-size: 1.2em;
+    color: #455A64;
+}
 .sb-search{
     background-color: white;
     display: flex;
@@ -11,6 +19,8 @@
     width: 80%;
     margin: 10px auto;
 }
+
+
 
 .sb-search input{
     width: 100%;
@@ -21,11 +31,18 @@
 }
 
 .ug-list{
+    height: 12%;
     display: flex;
     cursor: pointer;
     padding :10px 10px;
     gap: 10px;
     align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    column-gap: 15px;
+    padding: 5px 10px;
+    margin: 11px 0px;
+    border-radius: 20px;
+    background-color: #f6f7fbff;
 }
 .ug-list:hover{
     background-color: #d9d9d9;

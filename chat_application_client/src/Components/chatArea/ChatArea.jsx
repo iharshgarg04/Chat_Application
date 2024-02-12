@@ -22,7 +22,7 @@ const ChatArea = () => {
   const [messageContent, setMessageContent] = useState("");
   const messagesEndRef = useRef(null);
   const dyParams = useParams();
-  const [chat_id, chat_user] = dyParams._id.split("&");
+  const [chat_id, chat_user,avatarImage] = dyParams._id.split("&");
   const userData = JSON.parse(Cookies.get("userData"));
   const [allMessages, setAllMessages] = useState([]);
   const [loaded, setloaded] = useState(false);
@@ -32,7 +32,6 @@ const ChatArea = () => {
   const ENDPOINT = 'http://localhost:5000'
 
   const sendMessage = () => {
-    var data =null;
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
@@ -47,10 +46,10 @@ const ChatArea = () => {
         config
       )
       .then(({ response }) => {
-        data = response;
         console.log("Message Fired");
+        console.log(response);
+        socket.emit("newMessage",response);
       });
-      socket.emit("newMessage",data);
   };
 
   useEffect(()=>{
@@ -74,6 +73,7 @@ const ChatArea = () => {
       }
     })
     return () => {
+      console.log("message recieved");
       socket.off("message received");
     };
   },[allMessages,allMessagesCopy])
@@ -92,7 +92,7 @@ const ChatArea = () => {
         socket.emit("join chat",chat_id);
       });
       setAllMessagesCopy(allMessages);
-  }, [refresh,chat_id, userData.data.token,allMessages]);
+  }, [refresh,chat_id, userData.data.token]);
 
   if (!loaded) {
     return (
@@ -130,7 +130,12 @@ const ChatArea = () => {
     return (
       <div className="chatArea-container">
         <div className="chatArea-header">
-          <p className="con-icon">{chat_user[0]}</p>
+        <div className="avatar-box " >
+                    <img
+                      src={`data:image/svg+xml;base64,${avatarImage}`}
+                      alt="user avatar"
+                    />
+                  </div>
           <div className="header-text">
             <p className="con-title">{chat_user}</p>
             {/* <p className="con-timestamp">{props.timestamp}</p> */}
@@ -153,7 +158,7 @@ const ChatArea = () => {
               }
             })}
         </div>
-        <div ref={messagesEndRef} className="BOTTOM" />
+        {/* <div ref={messagesEndRef} className="BOTTOM" /> */}
         <div className="text-input-area">
           <input
             type="text"
@@ -174,6 +179,13 @@ const ChatArea = () => {
           />
           <IconButton
           className="icon"
+          sx={{
+            backgroundColor:'#e8505b',
+            borderRadius:'30%',
+            color:'white',
+            margin:'auto',
+            padding: '7px 11px'
+          }}
           onClick={()=>{
             sendMessage();
             setRefresh(!refresh);

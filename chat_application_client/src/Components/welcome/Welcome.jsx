@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../../assests/chating.svg'
+import logo from '../../assests/welcome.svg'
 import './welcome.css'
 import Cookies from 'js-cookie';
 

@@ -3,7 +3,7 @@ import User from "../../Components/User";
 import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import logo from "../../assests/chating.svg";
+import logo from "../../assests/welcome.svg";
 import "./users.css";
 import Cookies from "js-cookie";
 import axios from "axios"
@@ -42,7 +42,7 @@ const Users = () => {
       <div className={"ug-header"}>
         <img
           src={logo}
-          style={{ height: "2rem", width: "2rem", marginLeft: "10px" }}
+          style={{ height: "100%", width: "4rem", marginLeft: "10px" }}
         />
         <p className={"ug-title"}>Available Users</p>
         <IconButton className={"icon"} onClick={()=>{
@@ -51,11 +51,11 @@ const Users = () => {
           <RefreshIcon />
         </IconButton>
       </div>
-      <div className={"sb-search"}>
+      <div className={"sb-search searchback"}>
         <IconButton className={"icon"}>
           <SearchIcon />
         </IconButton>
-        <input placeholder="Search" className={"search-box"} />
+        <input placeholder="Search" className={"search-box searchback"} />
       </div>
 
       {users.map((user,index) => {
@@ -83,7 +83,9 @@ const Users = () => {
             console.log("dispatched");
           }}
           >
-            <p className={"con-icon"}>{user.name[0]}</p>
+            <div className="avatar-box">
+            <img src={`data:image/svg+xml;base64,${user.avatarImage}`} alt="user avatar"/>
+            </div>
             <p className={"con-title" }>
               {user.name}
             </p>

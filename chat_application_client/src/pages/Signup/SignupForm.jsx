@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Form from "../../Components/LoginPage/Form";
 import { TextField, Button, CircularProgress } from "@mui/material";
 import "./signup.css";
@@ -8,14 +8,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
+import { useAvatar } from "../../Components/hooks/useAvatar";
+import AvatarUploader from "../../Components/AvatarUploader";
 
 const SignupForm = () => {
   const [formdata, setFormdata] = useState({
     name: "",
     email: "",
     password: "",
+    avatarImage: ""
   });
   const [loading, setLoading] = useState(false);
+
+  const { error: avatarError, isLoading: avatarLoading, fetchAvatar } = useAvatar();
 
   const navigate = useNavigate();
 
@@ -50,6 +55,26 @@ const SignupForm = () => {
       setLoading(false);
     }
   };
+  
+  const generateAvatar = useCallback(async () => {
+    const avatar = await fetchAvatar();
+    setFormdata((prev) => ({
+      ...prev,
+      avatarImage: avatar
+    }));
+  }, [fetchAvatar]);
+  
+
+  
+    const handleGenerate = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      generateAvatar();
+    };
+
+    useEffect(() => {
+      generateAvatar();
+    }, [generateAvatar]);
 
   return (
     <>
@@ -103,6 +128,12 @@ const SignupForm = () => {
             label="Password"
             variant="outlined"
             name="password"
+          />
+          <AvatarUploader
+          error={avatarError}
+          isLoading={avatarLoading}
+          onGenerate = {handleGenerate}
+          avatar = {formdata.avatarImage}
           />
           <Button
             onClick={handleSubmit}

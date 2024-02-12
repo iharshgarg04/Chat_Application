@@ -21,7 +21,8 @@ exports.loginController = expressAsyncHandler(async (req, res) => {
             name : user.name,
             email:user.email,
             isAdmin:user.isAdmin,
-            token:generateToken(user._id)
+            token:generateToken(user._id),
+            avatarImage : user.avatarImage,
         };
         console.log(response);
         res.status(200).json(response);
@@ -35,7 +36,7 @@ exports.loginController = expressAsyncHandler(async (req, res) => {
 
 });
 exports.signupController = expressAsyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password , avatarImage } = req.body;
 
   if (!name || !email || !password) {
     return res.status(403).send({
@@ -64,6 +65,7 @@ exports.signupController = expressAsyncHandler(async (req, res) => {
         name, 
         email, 
         password,
+        avatarImage
     });
 
     if(user){

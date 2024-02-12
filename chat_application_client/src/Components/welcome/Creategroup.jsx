@@ -81,22 +81,37 @@ const Creategroup = () => {
         </Dialog>
       </div>
       <div className={"createGroups-container"}>
-        <input
-          placeholder="Enter Group Name"
-          className={"search-box"}
-          onChange={(e) => {
-            setGroupName(e.target.value);
-          }}
-        />
-        <IconButton
-          className={"icon"}
-          onClick={() => {
-            handleClickOpen();
-            // createGroup();
-          }}
-        >
-          <DoneOutlineRoundedIcon />
-        </IconButton>
+        <div className="createGroups-box">
+          <div>
+            <h1>Enter Group Name</h1>
+          </div>
+          <div className="creategroupInput">
+            <input
+              placeholder="Group Name"
+              className={"search-box"}
+              onChange={(e) => {
+                setGroupName(e.target.value);
+              }}
+            />
+            <Button
+            variant="contained"
+              className={"icon"}
+              onClick={() => {
+                handleClickOpen();
+                // createGroup();
+              }}
+              sx={{
+                backgroundColor:'#e8505b',
+                padding:'10px 10px',
+                '&:hover':{
+                  backgroundColor:'#e8505b'
+                }
+            }}
+            >
+              Create Group
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );
