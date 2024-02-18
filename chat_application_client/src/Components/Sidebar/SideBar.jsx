@@ -22,6 +22,7 @@ const SideBar = () => {
   const { refresh, setRefresh } = useContext(myContext);
   const lighttheme = useSelector((state) => state.themeKey);
   const [conversation, setConversation] = useState([]);
+  const [searchquerry, setSearchquerry] = useState("");
 
   const userData = JSON.parse(Cookies.get("userData"));
 
@@ -35,11 +36,18 @@ const SideBar = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    axios.get("http://localhost:5000/chat/", config).then((response) => {
+    const response = axios.get(`http://localhost:5000/chat?search=${searchquerry}`, config).then((response) => {
       console.log("Data refresed in sidebar", response.data);
       setConversation(response.data);
     });
-  }, [refresh]);
+    console.log(response);
+  }, [refresh,searchquerry]);
+
+  const handleSearchQuerry = (event)=>{
+    setSearchquerry(event.target.value);
+    console.log(event.target.value);
+  }
+  
 
   return (
     <div className={"sidebar"}>
@@ -108,6 +116,7 @@ const SideBar = () => {
             type="text"
             placeholder="Search"
             className={lighttheme ? "" : "dark"}
+            onChange={handleSearchQuerry}
           />
         </div>
       </div>

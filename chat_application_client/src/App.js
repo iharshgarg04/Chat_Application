@@ -10,6 +10,7 @@ import Creategroup from './Components/welcome/Creategroup';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Users from './pages/users/Users';
+import VerifyOtp from './pages/verificationPage/VerifyOtp';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Navbar/>}>
           <Route index element={<Login/>}/>
           <Route path="signup" element={<Signup/>} />
+          <Route path='signup/verify' element={<VerifyOtp/>}/>
         </Route>
         <Route path='app' element={<MainContainer/>} >
             <Route path='welcome' element={<Welcome/>} />

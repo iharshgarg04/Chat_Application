@@ -18,6 +18,7 @@ const Users = () => {
   const userData = JSON.parse(Cookies.get("userData"));
   const dispatch = useDispatch();
   console.log(userData);
+  const [searchquerry, setSearchquerry] = useState("");
 
   if(!userData){
     console.log("User Not Authenticated");
@@ -31,11 +32,16 @@ const Users = () => {
         }
     }
 
-    axios.get("http://localhost:5000/user/fetchAllUsers",config).then((data)=>{
+    axios.get(`http://localhost:5000/user/fetchAllUsers?search=${searchquerry}`,config).then((data)=>{
         console.log("User refresed in user panel");
         setusers(data.data);
     })
-  },[refresh])
+  },[refresh,searchquerry])
+
+  const handleSearchQuerry = (event)=>{
+    setSearchquerry(event.target.value);
+    console.log(event.target.value);
+  }
   
   return (
     <User>
@@ -55,7 +61,7 @@ const Users = () => {
         <IconButton className={"icon"}>
           <SearchIcon />
         </IconButton>
-        <input placeholder="Search" className={"search-box searchback"} />
+        <input placeholder="Search" className={"search-box searchback"} onChange={handleSearchQuerry}/>
       </div>
 
       {users.map((user,index) => {
@@ -74,6 +80,7 @@ const Users = () => {
             axios.post(
               "http://localhost:5000/chat/",{
                 userId:user._id,
+                name:users.name
               },
               config
             ).then(()=>{

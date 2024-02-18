@@ -10,6 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import { useAvatar } from "../../Components/hooks/useAvatar";
 import AvatarUploader from "../../Components/AvatarUploader";
+import { setSignupData } from "../../Features/authotp";
+import { useDispatch } from "react-redux";
 
 const SignupForm = () => {
   const [formdata, setFormdata] = useState({
@@ -19,41 +21,58 @@ const SignupForm = () => {
     avatarImage: ""
   });
   const [loading, setLoading] = useState(false);
-
+  const dispatch = useDispatch();
   const { error: avatarError, isLoading: avatarLoading, fetchAvatar } = useAvatar();
 
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
-    // console.log(e.target.value);
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/user/signup/",
-        formdata
-      );
-
-      console.log(response);
-      if (response.status === 200) {
-        toast.success("Signup Successful");
-        Cookies.set("userData", JSON.stringify(response),{expires: 7 });
-        navigate("/app/welcome");
-      } else {
-        toast.error("Signup failed. Please try again.");
-      }
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      if(error.response.status=== 400){
-        toast.error("User with this email or username already exits");
-      }
-      setLoading(false);
+    const signupData = {
+      ...formdata
     }
+    dispatch(setSignupData(signupData));
+    setLoading(true);
+    const response = await axios.post("http://localhost:5000/user/otp",formdata);
+    if(response.status===200){
+      console.log("OTP is donr from client side");
+      toast.success("Otp send successfuly");
+      navigate("/signup/verify");
+      setLoading(false);
+      setFormdata({
+        name: "",
+        email: "",
+        password: "",
+        avatarImage: ""
+      })
+    }else{
+      toast.error("Error while sending otp");
+    }
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:5000/user/signup/",
+    //     formdata
+    //   );
+
+    //   console.log(response);
+    //   if (response.status === 200) {
+    //     toast.success("Signup Successful");
+    //     Cookies.set("userData", JSON.stringify(response),{expires: 7 });
+    //     navigate("/app/welcome");
+    //   } else {
+    //     toast.error("Signup failed. Please try again.");
+    //   }
+
+    // } catch (error) {
+    //   console.log(error);
+    //   if(error.response.status=== 400){
+    //     toast.error("User with this email or username already exits");
+    //   }
+    //   setLoading(false);
+    // }
   };
   
   const generateAvatar = useCallback(async () => {

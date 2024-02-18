@@ -58,6 +58,13 @@ exports.accessChat = expressAsyncHandler(async (req, res) => {
 exports.fetchChats = expressAsyncHandler(async (req, res) => {
   try {
     console.log("Fetch Chats API : ", req);
+
+    if (!req.user || !req.user._id) {
+      return res.status(400).json({
+        success: false,
+        message: "User information is missing or incomplete",
+      });
+    }
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
     .populate("users","-password")
     .populate("groupAdmin","-password")
