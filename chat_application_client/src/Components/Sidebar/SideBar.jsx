@@ -15,6 +15,8 @@ import { IconButton } from "@mui/material";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { myContext } from "../Main/MainContainer";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -23,6 +25,16 @@ const SideBar = () => {
   const lighttheme = useSelector((state) => state.themeKey);
   const [conversation, setConversation] = useState([]);
   const [searchquerry, setSearchquerry] = useState("");
+
+  //menu option
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const userData = JSON.parse(Cookies.get("userData"));
 
@@ -36,18 +48,25 @@ const SideBar = () => {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    const response = axios.get(`http://localhost:5000/chat?search=${searchquerry}`, config).then((response) => {
-      console.log("Data refresed in sidebar", response.data);
-      setConversation(response.data);
-    });
+    const response = axios
+      .get(`http://localhost:5000/chat?search=${searchquerry}`, config)
+      .then((response) => {
+        console.log("Data refresed in sidebar", response.data);
+        setConversation(response.data);
+      });
     console.log(response);
-  }, [refresh,searchquerry]);
+  }, [refresh, searchquerry]);
 
-  const handleSearchQuerry = (event)=>{
+  const handleSearchQuerry = (event) => {
     setSearchquerry(event.target.value);
     console.log(event.target.value);
-  }
-  
+  };
+
+  //logout
+  const handleLogout = () => {
+    Cookies.remove("userData");
+    navigate("/");
+  };
 
   return (
     <div className={"sidebar"}>
@@ -60,15 +79,23 @@ const SideBar = () => {
             fontWeight: "bolder",
           }}
         >
-          {/* <div className="avatar-box">
-            <img
-              src={`data:image/svg+xml;base64,${userData.data.avatarImage}`}
-              alt="user avatar"
-            />
-          </div> */}
-          <IconButton>
+          <IconButton onClick={handleClick}>
             <AccountCircleIcon />
           </IconButton>
+          {/* menu */}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
+
           <p style={{ textTransform: "uppercase" }}>{userData.data.name}</p>
         </div>
         <div className="other-icons">
@@ -81,7 +108,10 @@ const SideBar = () => {
             <PersonAddIcon className={"icon " + (lighttheme ? "" : "dark")} />
           </IconButton>
           <IconButton className="iconshadow">
-            <GroupAddIcon className={"icon " + (lighttheme ? "" : "dark")} />
+            <GroupAddIcon
+              onClick={() => navigate("joinGroup")}
+              className={"icon " + (lighttheme ? "" : "dark")}
+            />
           </IconButton>
           <IconButton
             className="iconshadow"
@@ -122,10 +152,12 @@ const SideBar = () => {
       </div>
       <div className={"sb-conversation " + (lighttheme ? "" : "dark")}>
         {conversation.map((conversation, index) => {
-          if (conversation.users.length === 1) {
+          if (
+            conversation.users.length === 1 
+          ) {
             return <div key={index}></div>;
           }
-          if (conversation.lastMessage === undefined) {
+          if (conversation.latestMessage === undefined) {
             return (
               <div
                 key={index}
@@ -139,22 +171,33 @@ const SideBar = () => {
                   className="conversation-container"
                   onClick={() => {
                     navigate(
-                      "chat/" +
-                        conversation._id +
-                        "&" +
-                        conversation.users[1].name +
-                        "&" +
-                        conversation.users[1].avatarImage
+                      `chat/${conversation._id}&${
+                        conversation.isGroupChat === false
+                          ? ( conversation.users[0]._id === userData.data._id ? conversation.users[1].name : conversation.users[0].name)
+                          : conversation.chatName
+                      }&${
+                        conversation.isGroupChat === false
+                          ? ( conversation.users[0]._id === userData.data._id ? conversation.users[1].avatarImage : conversation.users[0].avatarImage)
+                          : conversation.avatarImage
+                      }`
                     );
                   }}
                 >
                   <div className="avatar-box ">
                     <img
-                      src={`data:image/svg+xml;base64,${conversation.users[1].avatarImage}`}
+                      src={`data:image/svg+xml;base64,${
+                        conversation.isGroupChat === false
+                          ?( conversation.users[0]._id === userData.data._id ? conversation.users[1].avatarImage : conversation.users[0].avatarImage)
+                          : conversation.avatarImage
+                      }`}
                       alt="user avatar"
                     />
                   </div>
-                  <p className="con-title">{conversation.users[1].name}</p>
+                  <p className="con-title">
+                    {conversation.isGroupChat === false
+                      ? ( conversation.users[0]._id === userData.data._id ? conversation.users[1].name : conversation.users[0].name)
+                      : conversation.chatName}
+                  </p>
                   <p className="con-lastMessage">
                     No previous Messages, click here to start a new chat
                   </p>
@@ -168,17 +211,35 @@ const SideBar = () => {
                 className="conversation-container"
                 onClick={() => {
                   navigate(
-                    "chat/" +
-                      conversation._id +
-                      "&" +
-                      conversation.users[1].name
+                    `chat/${conversation._id}&${
+                      conversation.isGroupChat === false
+                        ? ( conversation.users[0]._id === userData.data._id ? conversation.users[1].name : conversation.users[0].name)
+                        : conversation.chatName
+                    }&${
+                      conversation.isGroupChat === false
+                        ? ( conversation.users[0]._id === userData.data._id ? conversation.users[1].avatarImage : conversation.users[0].avatarImage)
+                        : conversation.avatarImage
+                    }`
                   );
                 }}
               >
-                <p className="con-icon">{conversation.users[1].name[0]}</p>
-                <p className="con-title">{conversation.users[1].name}</p>
+                <div className="avatar-box">
+                  <img
+                    src={`data:image/svg+xml;base64,${
+                      conversation.isGroupChat === false
+                        ? ( conversation.users[0]._id === userData.data._id ? conversation.users[1].avatarImage : conversation.users[0].avatarImage)
+                        : conversation.avatarImage
+                    }`}
+                    alt="user avatar"
+                  />
+                </div>
+                <p className="con-title">
+                    {conversation.isGroupChat === false
+                      ?( conversation.users[0]._id === userData.data._id ? conversation.users[1].name : conversation.users[0].name)
+                      : conversation.chatName}
+                  </p>
                 <p className="con-lastMessage">
-                  {conversation.lastMessage.content}
+                  {conversation.latestMessage.content}
                 </p>
               </div>
             );

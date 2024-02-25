@@ -6,6 +6,10 @@ const chatRoutes = require("./routes/chatRoutes")
 const messageRoutes = require("./routes/messageRoutes");
 const cors = require('cors');
 const { Server, Socket } = require('socket.io');
+const Message = require('./models/message');
+const Chat = require('./models/chat');
+
+
 
 const app = express();
 app.use(express.json());
@@ -28,6 +32,7 @@ app.use("/message",messageRoutes);
 const connectDb = async()=>{
     try{
         const connect = await mongoose.connect(process.env.MONGO_URL)
+        
         console.log("database connected successfully")
     }
     catch(error){
@@ -42,8 +47,10 @@ const server = app.listen(PORT,()=>{
 });
 
 const io = require("socket.io")(server,{
+    pingTimeout:120000,
     cors:{
         origin:"http://localhost:3000",
+        credentials:true
     },
     pingTimeout : 60000
 });
@@ -55,18 +62,19 @@ io.on("connection",(socket)=>{
     });
 
     socket.on("join chat",(room)=>{
+        console.log(room);
         socket.join(room);
     });
 
     socket.on("new message",(newMessageStatus)=>{
-        const chat = newMessageStatus.chat;
+        var chat = newMessageStatus.chat;
         console.log(chat);
         if(!chat.users){
             return console.log("chat users not defined")
         }
         chat.users.forEach((user) => {
             if(user._id == newMessageStatus.sender._id) return;
-            socket.in(user._id).emit("message received", newMessageRecieved)
+            socket.in(user._id).emit("message recieved", newMessageStatus)
         });
     })
 })

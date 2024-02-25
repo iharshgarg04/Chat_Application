@@ -8,7 +8,7 @@ const User = require("../models/user");
 exports.allMessages = expressAsyncHandler(async (req, res) => {
     try {
       const messages = await Message.find({ chat: req.params.chatId })
-        .populate("sender", "name email")
+        .populate("sender", "name email avatarImage")
         .populate("reciever")
         .populate("chat");
       res.json(messages);
@@ -39,7 +39,7 @@ exports.sendMessage = expressAsyncHandler(async(req,res)=>{
         var message = await Message.create(newMessage);
         console.log(message);
 
-        message = await message.populate("sender", "name pic");
+        message = await message.populate("sender", "name avatarImage");
         message = await message.populate("chat");
         message = await message.populate("reciever");
     

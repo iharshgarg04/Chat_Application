@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Users from './pages/users/Users';
 import VerifyOtp from './pages/verificationPage/VerifyOtp';
+import Groups from './pages/Groups/Groups';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
             <Route path='chat/:_id' element={<ChatArea/>} />
             <Route path='create-groups' element={<Creategroup/>} />
             <Route path='users' element={<Users/>} />
+            <Route path='joinGroup' element={<Groups/>}/>
         </Route>
       </Routes>
     </div>

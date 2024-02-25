@@ -8,21 +8,56 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./creategroup.css";
-import { AnimatePresence } from "framer-motion";
-import { motion } from "framer-motion"
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useAvatar } from "../hooks/useAvatar";
+import AvatarUploader from "../AvatarUploader";
+import { myContext } from "../Main/MainContainer";
 
 const Creategroup = () => {
   const userData = JSON.parse(Cookies.get("userData"));
-  if(!userData){
+  if (!userData) {
     console.log("user not authenticates");
   }
 
-  const[groupName, setGroupName] = useState("");
+  const { refresh, setRefresh } = useContext(myContext);
+
+  const [groupName, setGroupName] = useState({
+    name : "",
+    avatarImage: "",
+  });
+
+  const handleInputChange = (e) => {
+    setGroupName({ ...groupName, [e.target.name]: e.target.value });
+  };
+
   const [open, setOpen] = React.useState(false);
+  const {
+    error: avatarError,
+    isLoading: avatarLoading,
+    fetchAvatar,
+  } = useAvatar();
+
+  //Avatar
+  const generateAvatar = async () => {
+    const avatar = await fetchAvatar();
+    setGroupName((prev) => ({
+      ...prev,
+      avatarImage: avatar,
+    }));
+  };
+
+  const handleGenerate = (e)=>{
+    e.preventDefault();
+    e.stopPropagation();
+    generateAvatar();
+  }
+
+  useEffect(()=>{
+    generateAvatar();
+  },[]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,21 +67,24 @@ const Creategroup = () => {
     setOpen(false);
   };
 
-
-  const createGroups = ()=>{
-    const config ={
-      headers:{
-        Authorization : `Bearer ${userData.data.token}`,
+  const createGroups = () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userData.data.token}`,
       },
-    }
+    };
 
     axios.post(
-      "http://localhost:5000/chat/createGroup",{
-        name : groupName,
-        users : '["65908be6db44e4da3e2dd971" , "6593d451d083f62ac91966e4"]'
-      },config
-    )
-  } 
+      "http://localhost:5000/chat/createGroup",
+      {
+        name:groupName.name,
+        avatarImage:groupName.avatarImage,
+      },
+      config
+    ).then(()=>{
+      setRefresh(!refresh);
+    });
+  };
 
   return (
     <>
@@ -87,26 +125,31 @@ const Creategroup = () => {
           </div>
           <div className="creategroupInput">
             <input
+              onChange={handleInputChange}
+              name="name"
               placeholder="Group Name"
               className={"search-box"}
-              onChange={(e) => {
-                setGroupName(e.target.value);
-              }}
+            />
+            <AvatarUploader
+              error={avatarError}
+              isLoading={avatarLoading}
+              onGenerate={handleGenerate}
+              avatar={groupName.avatarImage}
             />
             <Button
-            variant="contained"
+              variant="contained"
               className={"icon"}
               onClick={() => {
                 handleClickOpen();
                 // createGroup();
               }}
               sx={{
-                backgroundColor:'#e8505b',
-                padding:'10px 10px',
-                '&:hover':{
-                  backgroundColor:'#e8505b'
-                }
-            }}
+                backgroundColor: "#e8505b",
+                padding: "10px 10px",
+                "&:hover": {
+                  backgroundColor: "#e8505b",
+                },
+              }}
             >
               Create Group
             </Button>
@@ -115,7 +158,6 @@ const Creategroup = () => {
       </div>
     </>
   );
-
 };
 
 export default Creategroup;

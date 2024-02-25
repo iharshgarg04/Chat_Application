@@ -3,7 +3,7 @@ import React from 'react'
 import LoopIcon from '@mui/icons-material/Loop';
 
 const AvatarUploader = ({error,isLoading,avatar,onGenerate}) => {
-    console.log(avatar);
+    // console.log(avatar);
   return (
     <div className='Wrapper'>
         <div className='AvatarBox'>

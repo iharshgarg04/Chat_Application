@@ -6,12 +6,13 @@ import { motion } from "framer-motion"
 const Messageother = ({props}) => {
   return (
     <motion.div whileHover={{scale:1.04}} className='message-others-con'>
+      
       <div className='message-other-icon'>
-          <p>{props.sender.name[0]}</p>
+        <img src={`data:image/svg+xml;base64,${props.sender.avatarImage}`} alt="" width={"40px"} height={"40px"}/>
       </div>
       <div className='message-other-container'>
         <div className='message-other-title'>
-          {props.sender.name}
+            {props.sender.name}
         </div>
         <div className='message-other-message'>
           {props.content}

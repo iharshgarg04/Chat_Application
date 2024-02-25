@@ -8,12 +8,14 @@ import Messageself from "../Messages/Messageself";
 import Skeleton from "@mui/material/Skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios, { all } from "axios";
 import Cookies from "js-cookie";
 import { myContext } from "../Main/MainContainer";
 import io from "socket.io-client";
+import image from "../../assests/doodle.jpg"
 
 let socket;
+const ENDPOINT = 'http://localhost:5000';
 
 const ChatArea = () => {
 
@@ -27,17 +29,25 @@ const ChatArea = () => {
   const [allMessages, setAllMessages] = useState([]);
   const [loaded, setloaded] = useState(false);
   const [socketConnectionStatus, setSocketConnectionStatus] = useState(false);
-  const [allMessagesCopy, setAllMessagesCopy] = useState([]);
+  const msgRef = useRef(null);
+  // const [allMessagesCopy, setAllMessagesCopy] = useState([]);
 
-  const ENDPOINT = 'http://localhost:5000'
+  useEffect(()=>{
+    socket = io(ENDPOINT);
+    socket.emit("setup",userData);
+    socket.on("connection",()=>{
+      setSocketConnectionStatus(true)
+    })
+    
+  },[])
 
-  const sendMessage = () => {
+  const sendMessage = async() => {
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    axios.post(
+    const {data} = await axios.post(
         "http://localhost:5000/message/",
         {
           content: messageContent,
@@ -45,38 +55,29 @@ const ChatArea = () => {
         },
         config
       )
-      .then(({ response }) => {
-        console.log("Message Fired");
-        console.log(response);
-        socket.emit("newMessage",response);
-      });
+        setMessageContent("");
+        setRefresh((prevRefresh) => !prevRefresh); 
+        setAllMessages([...allMessages,data]);
+        // console.log("Message Fired");
+        // console.log(allMessages);
+        socket.emit("new message",data);
   };
 
-  useEffect(()=>{
-    socket = io(ENDPOINT);
-    socket.emit("setup",userData);
-    socket.on("connection",()=>{
-      setSocketConnectionStatus(!socketConnectionStatus)
-    })
-    
-    return () => {
-      socket.off("connection");
-    };
-  },[])
+
 
   useEffect(()=>{
-    socket.on("message received",(newMessage)=>{
-      if(!allMessagesCopy || allMessagesCopy._id !== newMessage._id){
-
+    socket.on("message recieved",(newMessage)=>{
+      if(chat_id !== newMessage.chat._id){
+        // console.log(allMessages);
+        // console.log(newMessage.chat._id);
+        console.log("Users are not chating with each other");
       }else{
-        setAllMessages([...allMessages],newMessage)
+        console.log("message is recieved");
+        setAllMessages([...allMessages, newMessage]);
+        // console.log(allMessages)
       }
     })
-    return () => {
-      console.log("message recieved");
-      socket.off("message received");
-    };
-  },[allMessages,allMessagesCopy])
+  })
 
   useEffect(() => {
     console.log("Users refreshed");
@@ -87,12 +88,21 @@ const ChatArea = () => {
     };
     axios.get("http://localhost:5000/message/" + chat_id, config)
       .then(({ data }) => {
+        // console.log("Hii i am allmessagescopy");
         setAllMessages(data);
+        // console.log(data);
+        // console.log("hii ba")
         setloaded(true);
         socket.emit("join chat",chat_id);
       });
-      setAllMessagesCopy(allMessages);
   }, [refresh,chat_id, userData.data.token]);
+
+  useEffect(()=>{
+    if(msgRef.current){
+      msgRef.current.scrollTop = msgRef.current.scrollHeight
+    }
+  },[allMessages])
+  
 
   if (!loaded) {
     return (
@@ -144,7 +154,8 @@ const ChatArea = () => {
             <DeleteIcon />
           </IconButton>
         </div>
-        <div className="messages-container">
+        <div className="messages-container" ref={msgRef}>
+          <div className="msg-cont-back"></div>
           {allMessages
             .slice(0)
             // .reverse()
@@ -154,11 +165,11 @@ const ChatArea = () => {
               if (sender._id === self_id) {
                 return <Messageself props={message} key={index} />;
               } else {
-                return <Messageother props={message} key={index} />;
+                return <Messageother props={message} key={index}/>;
               }
             })}
         </div>
-        {/* <div ref={messagesEndRef} className="BOTTOM" /> */}
+        <div ref={messagesEndRef} className="BOTTOM" />
         <div className="text-input-area">
           <input
             type="text"
@@ -188,7 +199,7 @@ const ChatArea = () => {
           }}
           onClick={()=>{
             sendMessage();
-            setRefresh(!refresh);
+            setRefresh(!refresh)
           }}
           >
             <SendIcon />

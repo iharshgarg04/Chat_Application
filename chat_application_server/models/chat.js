@@ -18,7 +18,11 @@ const chatModel = mongoose.Schema({
     groupAdmin:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"User",
-    }
+    },
+    avatarImage: {
+        type: String,
+        default: ''
+    },
 })
 
 const Chat = mongoose.model("Chat",chatModel);

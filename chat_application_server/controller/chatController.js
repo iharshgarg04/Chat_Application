@@ -22,8 +22,6 @@ exports.accessChat = expressAsyncHandler(async (req, res) => {
     .populate("users", "-password")
     .populate("latestMessage");
 
-  // res.send(isChat);
-
   isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
     select: "name email",
@@ -65,7 +63,10 @@ exports.fetchChats = expressAsyncHandler(async (req, res) => {
         message: "User information is missing or incomplete",
       });
     }
-    Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+    Chat.find({ 
+      users: { $elemMatch: { $eq: req.user._id } },
+      isGroupChat: { $exists: true },
+    })
     .populate("users","-password")
     .populate("groupAdmin","-password")
     .populate("latestMessage")
@@ -87,19 +88,21 @@ exports.fetchChats = expressAsyncHandler(async (req, res) => {
 
 
 exports.createGroupChat = expressAsyncHandler(async(req,res)=>{
-  if(!req.body.users || !req.body.name){
+  const {name,avatarImage} = req.body;
+  console.log("Hii am groups");
+  console.log(req.body);
+  if(!name){
     return res.status(400).send({message : "Data is insufficient"})
   }
 
-  var users = JSON.parse(req.body.users);
-  users.push(req.user);
 
   try{
     const groupChat = await Chat.create({
-      chatName: req.body.name,
-      users : users,
+      chatName: name,
+      users : req.user,
       isGroupChat : true,
       groupAdmin : req.user,
+      avatarImage : avatarImage
     })
 
     const fullGroupChat = await Chat.findOne({_id : groupChat._id})
@@ -112,4 +115,44 @@ exports.createGroupChat = expressAsyncHandler(async(req,res)=>{
     console.log(error);
   }
 
+})
+
+exports.fetchGroup = expressAsyncHandler(async(req,res)=>{
+    try{
+      const allGroups = await Chat.where("isGroupChat").equals(true);
+      res.status(200).send(allGroups);
+    }
+    catch(error){
+      res.status(400);
+      console.log("Error while fetching groups");
+    }
+})
+
+exports.addTogroup = expressAsyncHandler(async(req,res)=>{
+  try{
+    const {chatId} = req.body;
+    if(!chatId){
+      console.log("group id is not present ");
+      return res.status(400).json({
+        success:false,
+        message:"group id is not present",
+      })
+    }
+
+    const adduser = await Chat.findByIdAndUpdate(chatId,{$push:{users:req.user._id}},{new:true})
+    .populate("users","-password")
+    .populate("groupAdmin","-password");
+
+    if(!adduser){
+      res.status(404).json({
+        success:false,
+        message:"Error while adding user",
+      })
+    }else{
+      res.json(adduser);
+    }
+
+  }catch(error){
+    console.log(error.message);
+  }
 })

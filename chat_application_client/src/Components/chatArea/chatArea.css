@@ -59,9 +59,22 @@
     flex-direction: column;
     overflow-y: scroll;
     scrollbar-width: none;
+    z-index: 1;
 }
 
-.messages-container::before {
+.msg-cont-back{
+    background-image: url('../../assests/doodle.jpg');
+    width: 75%;
+    height: 83%;
+    opacity: 0.2;
+    z-index: -1;
+    width: -webkit-fill-available;
+    position: fixed;
+    pointer-events: none;
+    background-size: contain;
+}
+
+/* .messages-container::before {
     filter: blur(0.5px);
     content: "";
     position: absolute;
@@ -70,17 +83,19 @@
     bottom: 0;
     left: 0;
     background-image: url('../../assests/doodle.jpg');
+    background-attachment: fixed;
     background-size: contain;
     opacity: 0.2;
     pointer-events: none;
     z-index: -1;
-}
+} */
 
 .messages-container::-webkit-scrollbar{
     display: none;
 }
 
 .text-input-area{
+    z-index: 1;
     display: flex;
     padding: 10px 10px;
     margin: 2px 4px;

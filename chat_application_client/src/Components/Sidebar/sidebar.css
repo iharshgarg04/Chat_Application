@@ -58,6 +58,8 @@
     border-radius: 20px;
     transition-duration: 0.5s ;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    align-items: center;
+
 }
 
 .con-icon{
@@ -90,8 +92,9 @@
     font-size: 0.75rem;
     color: rgba(0, 0, 0, 0.54);
 }
-.con-lastmessage{
+.con-lastMessage{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 300;
 }
 /* .iconshadow{
     background: white !important;
