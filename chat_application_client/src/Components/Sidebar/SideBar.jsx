@@ -11,7 +11,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../Features/themeslice";
 import "./sidebar.css";
-import { IconButton } from "@mui/material";
+import { IconButton, MenuList } from "@mui/material";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { myContext } from "../Main/MainContainer";
@@ -19,6 +19,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Badge from "@mui/material/Badge";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import ChatIcon from '@mui/icons-material/Chat';
+// import Conversationuser from "../Conversationuser";
 
 const SideBar = () => {
   const navigate = useNavigate();
@@ -118,7 +120,7 @@ const SideBar = () => {
           </Menu>
 
           <p
-            className={lighttheme ? "pro-text" : "darker"}
+            className={"pro-text " +( lighttheme ? "" : "darker")}
             style={{ textTransform: "uppercase" }}
           >
             {userData.data.name}
@@ -162,6 +164,9 @@ const SideBar = () => {
               />
             )}
           </IconButton>
+          <IconButton className="chats-icons" sx={{display:"none"}} onClick={()=>navigate("/app/usersChat")}>
+            <ChatIcon/>
+          </IconButton>
         </div>
       </div>
       <div className={"sb-search-container " + (lighttheme ? "" : "dark")}>
@@ -196,19 +201,19 @@ const SideBar = () => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClosenoti}>
+            <MenuList onClick={handleClosenoti}>
               {!notification.length
-                ? "No new Message"
-                : notification.map((notif) => (
+                ? <MenuItem>No new Message</MenuItem>
+                :(notification.map((notif) => (
                     <MenuItem key={notif._id} onClick={()=>{
                       navigate(
                         `chat/${notif.chat._id}&${
                           notif.chat.isGroupChat === false
                             ? notif.chat.users[0]._id === userData.data._id
                               ? notif.chat.users[1].name
-                              : notif.users[0].name
+                              : notif.chat.users[0].name
                             : notif.chat.chatName
-                        }&${
+                        }&${conversation.isGroupChat}&${
                           notif.chat.isGroupChat === false
                             ? notif.chat.users[0]._id === userData.data._id
                               ? notif.chat.users[1].avatarImage
@@ -227,11 +232,12 @@ const SideBar = () => {
                               : notif.chat.users[0].name
                           }`}
                     </MenuItem>
-                  ))}
-            </MenuItem>
+                  )))}
+            </MenuList>
           </Menu>
         </div>
       </div>
+      {/* <Conversationuser/> */}
       <div className={"sb-conversation " + (lighttheme ? "" : "dark")}>
         {conversation.map((conversation, index) => {
           if (conversation.users.length === 1 && conversation.isGroupChat===false) {
@@ -261,7 +267,7 @@ const SideBar = () => {
                             ? conversation.users[1].name
                             : conversation.users[0].name
                           : conversation.chatName
-                      }&${
+                      }&${conversation.isGroupChat}&${
                         conversation.isGroupChat === false
                           ? conversation.users[0]._id === userData.data._id
                             ? conversation.users[1].avatarImage
@@ -283,7 +289,7 @@ const SideBar = () => {
                       alt="user avatar"
                     />
                   </div>
-                  <p className="con-title">
+                  <p className={"con-title " + (lighttheme ? "" : "dark")}>
                     {conversation.isGroupChat === false
                       ? conversation.users[0]._id === userData.data._id
                         ? conversation.users[1].name
@@ -310,7 +316,7 @@ const SideBar = () => {
                           ? conversation.users[1].name
                           : conversation.users[0].name
                         : conversation.chatName
-                    }&${
+                    }&${conversation.isGroupChat}&${
                       conversation.isGroupChat === false
                         ? conversation.users[0]._id === userData.data._id
                           ? conversation.users[1].avatarImage

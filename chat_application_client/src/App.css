@@ -107,6 +107,13 @@
 }
 
 
+
+@media only screen and (max-width:40em){
+  .sb-con-user{
+    display: block !important;
+  }
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);

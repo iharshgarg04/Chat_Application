@@ -25,7 +25,7 @@ const ChatArea = () => {
   const [messageContent, setMessageContent] = useState("");
   const messagesEndRef = useRef(null);
   const dyParams = useParams();
-  const [chat_id, chat_user, avatarImage] = dyParams._id.split("&");
+  const [chat_id, chat_user,isGroupChat, avatarImage] = dyParams._id.split("&");
   const userData = JSON.parse(Cookies.get("userData"));
   const [allMessages, setAllMessages] = useState([]);
   const [loaded, setloaded] = useState(false);
@@ -38,7 +38,7 @@ const ChatArea = () => {
 
 
   const fetchMessages = async () => {
-    if (!chatcontext) {
+    if (!chatcontext && !chat_id) {
       console.log("chatcontext is not available",chatcontext)
       return;
     }
@@ -48,14 +48,15 @@ const ChatArea = () => {
           Authorization: `Bearer ${userData.data.token}`,
         },
       };
+
       const { data } = await axios.get(
-        "http://localhost:5000/message/" + chatcontext._id,
+        "http://localhost:5000/message/" + chat_id,
         config
       );
       setAllMessages(data);
       setloaded(true);
-      socket.emit("join chat", chatcontext._id);
-    } catch (error) {
+      socket.emit("join chat", chat_id);
+    }catch(error) {
       toast.error("Error while fetching");
     }
   };
@@ -73,7 +74,7 @@ const ChatArea = () => {
       "http://localhost:5000/message/",
       {
         content: messageContent,
-        chatId: chatcontext,
+        chatId: chatcontext || chat_id,
       },
       config
     );
@@ -100,7 +101,8 @@ const ChatArea = () => {
   useEffect(() => {
     socket.on("message recieved", (newMessage) => {
       if (!selectedChat || selectedChat._id !== newMessage.chat._id) {
-        if(!notification.includes(newMessage)){
+        const present = notification.find((f)=>f.chat._id === newMessage.chat._id);
+        if(!present){
           setNotification([newMessage,...notification]);
           setRefresh(!refresh);
         }
@@ -198,7 +200,7 @@ const ChatArea = () => {
             </p>
             {/* <p className="con-timestamp">{props.timestamp}</p> */}
           </div>
-          {chatcontext.isGroupChat=== true ? <SeeUsers handleOpen={handleOpen} handleClose={handleclose} open={open} name={chat_user} /> : <div/>}
+          {isGroupChat=== "true" ? <SeeUsers handleOpen={handleOpen} handleClose={handleclose} open={open} name={chat_user} /> : <div/>}
           
         </div>
         <div className="messages-container" ref={msgRef}>

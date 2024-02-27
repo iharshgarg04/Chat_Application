@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assests/welcome.svg";
+import logo from "../../assests/talking.png";
 import "./Navbar.css";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { IconButton } from "@mui/material";
@@ -16,7 +16,7 @@ const Navbar = () => {
             <p>Chatty</p>
           </div>
         </div>
-
+{/* 
         <div className="mode">
           <IconButton
             sx={{
@@ -27,7 +27,7 @@ const Navbar = () => {
           >
             <LightModeIcon />
           </IconButton>
-        </div>
+        </div> */}
       </div>
       <Outlet />
     </div>

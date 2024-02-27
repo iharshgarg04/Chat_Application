@@ -144,5 +144,11 @@
     .sidebar{
         flex: 0;
     }
+    .pro-text{
+        display: none;
+    }
+    .chats-icons{
+        display: block !important;
+    }
 }
 

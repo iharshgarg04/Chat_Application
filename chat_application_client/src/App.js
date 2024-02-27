@@ -13,6 +13,8 @@ import Users from './pages/users/Users';
 import VerifyOtp from './pages/verificationPage/VerifyOtp';
 import Groups from './pages/Groups/Groups';
 import { useSelector } from 'react-redux';
+import SideBar from './Components/Sidebar/SideBar';
+// import Conversationuser from './Components/Conversationuser';
 
 function App() {
   const lightTheme= useSelector((state)=>state.themeKey);
@@ -32,6 +34,7 @@ function App() {
             <Route path='create-groups' element={<Creategroup/>} />
             <Route path='users' element={<Users/>} />
             <Route path='joinGroup' element={<Groups/>}/>
+            {/* <Route path='usersChat' element={<Conversationuser/>}/> */}
         </Route>
       </Routes>
     </div>
