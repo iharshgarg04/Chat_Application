@@ -12,11 +12,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import Users from './pages/users/Users';
 import VerifyOtp from './pages/verificationPage/VerifyOtp';
 import Groups from './pages/Groups/Groups';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const lightTheme= useSelector((state)=>state.themeKey);
 
   return (
-    <div className="App">
+    <div className={"App "+ (lightTheme ? "" : "dark")}>
       <ToastContainer/>
       <Routes>
         <Route path="/" element={<Navbar/>}>

@@ -23,6 +23,8 @@ const chatModel = mongoose.Schema({
         type: String,
         default: ''
     },
+},{
+    timestamps:true
 })
 
 const Chat = mongoose.model("Chat",chatModel);

@@ -32,7 +32,8 @@ app.use("/message",messageRoutes);
 const connectDb = async()=>{
     try{
         const connect = await mongoose.connect(process.env.MONGO_URL)
-        
+        // const result = await Message.deleteMany({});
+        // const result = await Chat.deleteMany({});
         console.log("database connected successfully")
     }
     catch(error){
@@ -60,15 +61,16 @@ io.on("connection",(socket)=>{
         socket.join(user.data._id);
         socket.emit("connected");
     });
-
+    
     socket.on("join chat",(room)=>{
+        console.log("user is joined");
         console.log(room);
         socket.join(room);
     });
 
     socket.on("new message",(newMessageStatus)=>{
         var chat = newMessageStatus.chat;
-        console.log(chat);
+        // console.log(chat);
         if(!chat.users){
             return console.log("chat users not defined")
         }

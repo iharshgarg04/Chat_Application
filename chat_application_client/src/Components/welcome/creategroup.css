@@ -10,6 +10,11 @@
     border-top: 7px solid #E1E1E1;
     border-left: 5px solid #E1E1E1;
 }
+.borderdark{
+    border-top: 7px solid #2C3333;
+    color: black !important;
+    border-left: 5px solid #2C3333;
+}
 .creategroupInput{
     gap: 10px;
     display: flex;
@@ -40,4 +45,7 @@
     border: none;
     font-size: 1.25rem;
     color: rgba(0, 0, 0, 0.54);
+}
+.darkerbox{
+    background-color: #CBE4DE !important;
 }

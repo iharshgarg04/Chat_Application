@@ -5,6 +5,7 @@
 
 .App{
   min-height: 100vh;
+  color: black !important;
 }
 
 .user-container{
@@ -16,6 +17,20 @@
 }
 .user-container::-webkit-scrollbar{
   display: none;
+}
+
+/* theme */
+.dark{
+  color: white !important;
+  background-color:#2E4F4F !important;
+}
+.darker{
+  background-color: #2C3333 !important;
+  color: white !important;
+}
+.darkerlight{
+  background-color: #CBE4DE !important;
+  color: #2C3333 !important;
 }
 
 /* ------Avatar-------- */
@@ -56,6 +71,41 @@
   width: 50px;
   /* background: rgb(225, 225, 225); */
 }
+
+/* ---------see User--------- */
+.Seeuserdialer{
+   display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 20%;
+    align-items: center;
+}
+
+
+.users-add{
+  display: flex;
+  gap:20px;
+  /* justify-content: center; */
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.addmemuser{
+  background-color: #2E4F4F;
+  display: flex;
+  gap: 20px;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 18px;
+}
+.addmem-cont{
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 
 @keyframes rotate {
   from {

@@ -95,7 +95,6 @@ exports.createGroupChat = expressAsyncHandler(async(req,res)=>{
     return res.status(400).send({message : "Data is insufficient"})
   }
 
-
   try{
     const groupChat = await Chat.create({
       chatName: name,
@@ -130,8 +129,8 @@ exports.fetchGroup = expressAsyncHandler(async(req,res)=>{
 
 exports.addTogroup = expressAsyncHandler(async(req,res)=>{
   try{
-    const {chatId} = req.body;
-    if(!chatId){
+    const {chatId , userId} = req.body;
+    if(!chatId || !userId){
       console.log("group id is not present ");
       return res.status(400).json({
         success:false,
@@ -139,7 +138,16 @@ exports.addTogroup = expressAsyncHandler(async(req,res)=>{
       })
     }
 
-    const adduser = await Chat.findByIdAndUpdate(chatId,{$push:{users:req.user._id}},{new:true})
+    const chat = await Chat.findById(chatId);
+    const alreadyPresent = chat.users.includes(userId);
+    if(alreadyPresent){
+      return res.status(402).json({
+        success:false,
+        message:"User is already present"
+      })
+    }
+
+    const adduser = await Chat.findByIdAndUpdate(chatId,{$push:{users:userId}},{new:true})
     .populate("users","-password")
     .populate("groupAdmin","-password");
 
@@ -156,3 +164,35 @@ exports.addTogroup = expressAsyncHandler(async(req,res)=>{
     console.log(error.message);
   }
 })
+
+exports.leaveGroup = expressAsyncHandler(async(req,res)=>{
+
+    try{
+      const {chat_id , user_id} = req.body;
+      if(!chat_id || !user_id ){
+        res.status(400).json({
+          success:false,
+          message:"data is insufficient"
+        })
+      }
+      const removed = await Chat.findByIdAndUpdate(chat_id,{$pull:{users:user_id}},{new:true})
+      .populate("users","-password")
+      .populate("groupAdmin","-password");
+      if(removed){
+        res.status(200).json(removed);
+      }else{
+        res.status(400).json({
+          success:false,
+          message:"error while leaving group"
+        })
+      }
+    }catch(error){
+      console.log("Hello brother");
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+      });
+    }
+  }
+)

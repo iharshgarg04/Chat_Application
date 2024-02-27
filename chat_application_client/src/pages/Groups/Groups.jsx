@@ -3,17 +3,19 @@ import React, { useContext, useEffect, useState } from "react";
 import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import logo from "../../assests/welcome.svg";
+import logo from "../../assests/talking.png";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { myContext } from "../../Components/Main/MainContainer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Groups = () => {
   const [groups, setGroups] = useState([]);
   const { refresh, setRefresh } = useContext(myContext);
   const userData = JSON.parse(Cookies.get("userData"));
   const dispatch = useDispatch();
+  const lightTheme= useSelector((state)=>state.themeKey);
   console.log(userData);
   const [searchquerry, setSearchquerry] = useState("");
 
@@ -29,7 +31,7 @@ const Groups = () => {
       },
     };
 
-    axios
+     axios
       .get(
         `http://localhost:5000/chat/fetchGroups?search=${searchquerry}`,
         config
@@ -37,6 +39,19 @@ const Groups = () => {
       .then((data) => {
         console.log("User refresed in user panel");
         setGroups(data.data);
+      }).catch((error)=>{
+        if(error.response && error.response.status===402){
+          toast('user is already on the group!', {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+        }
       });
   }, [refresh, searchquerry]);
 
@@ -46,15 +61,15 @@ const Groups = () => {
   };
 
   return (
-    <div className="groups-container">
-      <div className={"g-header"}>
+    <div className={"groups-container "+ (lightTheme ? "" : "dark")}>
+      <div className={"g-header " + (lightTheme ? "" : "darker")}>
         <img
           src={logo}
           style={{ height: "100%", width: "4rem", marginLeft: "10px" }}
         />
-        <p className={"g-title"}>Available Groups</p>
+        <p className={"g-title " + (lightTheme ? "" : "darker")}>Available Groups</p>
         <IconButton
-          className={"icon"}
+          className={"icon " + (lightTheme ? "" : "darker")}
           onClick={() => {
             setRefresh(!refresh);
           }}
@@ -62,13 +77,13 @@ const Groups = () => {
           <RefreshIcon />
         </IconButton>
       </div>
-      <div className={"sb-search searchback"}>
-        <IconButton className={"icon"}>
+      <div className={"sb-search searchback " + (lightTheme ? "" : "dark")}>
+        <IconButton className={"icon " + (lightTheme ? "" : "dark")}>
           <SearchIcon />
         </IconButton>
         <input
           placeholder="Search"
-          className={"search-box searchback"}
+          className={"search-box searchback "+ (lightTheme ? "" : "dark")}
           onChange={handleSearchQuerry}
         />
       </div>
@@ -76,7 +91,7 @@ const Groups = () => {
       {groups.map((user, index) => {
         return (
           <div
-            className="g-list"
+            className={"g-list " + (lightTheme ? "" : "dark")}
             key={index}
             onClick={() => {
               console.log("Creating chat with ", user.chatName);
@@ -91,18 +106,18 @@ const Groups = () => {
                 userId : userData.data._id,
               },
               config).then(()=>{
-                setRefresh(!refresh);
+                setRefresh((prev)=> !prev);
               })
 
             }}
           >
-            <div className="avatar-box">
+            <div className={"avatar-box " + (lightTheme ? "" : "dark")}>
               <img
                 src={`data:image/svg+xml;base64,${user.avatarImage}`}
                 alt="user avatar"
               />
             </div>
-            <p className={"con-title"}>{user.chatName}</p>
+            <p className={"con-title " + (lightTheme ? "" : "dark")}>{user.chatName}</p>
           </div>
         );
       })}

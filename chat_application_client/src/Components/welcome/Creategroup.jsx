@@ -15,8 +15,10 @@ import axios from "axios";
 import { useAvatar } from "../hooks/useAvatar";
 import AvatarUploader from "../AvatarUploader";
 import { myContext } from "../Main/MainContainer";
+import { useSelector } from "react-redux";
 
 const Creategroup = () => {
+  const lightTheme= useSelector((state)=>state.themeKey);
   const userData = JSON.parse(Cookies.get("userData"));
   if (!userData) {
     console.log("user not authenticates");
@@ -67,23 +69,24 @@ const Creategroup = () => {
     setOpen(false);
   };
 
-  const createGroups = () => {
+  const createGroups =async() => {
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
 
-    axios.post(
+    const response = await axios.post(
       "http://localhost:5000/chat/createGroup",
       {
         name:groupName.name,
         avatarImage:groupName.avatarImage,
       },
       config
-    ).then(()=>{
+    )
+    if(response.status===200){
       setRefresh(!refresh);
-    });
+    }
   };
 
   return (
@@ -109,6 +112,7 @@ const Creategroup = () => {
             <Button
               onClick={() => {
                 createGroups();
+                setRefresh(!refresh)
                 handleClose();
               }}
               autoFocus
@@ -118,9 +122,9 @@ const Creategroup = () => {
           </DialogActions>
         </Dialog>
       </div>
-      <div className={"createGroups-container"}>
-        <div className="createGroups-box">
-          <div>
+      <div className={"createGroups-container "+ (lightTheme ? "" : "dark borderdark")}>
+        <div className={"createGroups-box "+ (lightTheme ? "" : "darkerbox")}>
+          <div className={(lightTheme ? "" : "darkerbox")}>
             <h1>Enter Group Name</h1>
           </div>
           <div className="creategroupInput">
@@ -128,7 +132,7 @@ const Creategroup = () => {
               onChange={handleInputChange}
               name="name"
               placeholder="Group Name"
-              className={"search-box"}
+              className={"search-box " + (lightTheme ? "" : "")}
             />
             <AvatarUploader
               error={avatarError}
@@ -138,7 +142,7 @@ const Creategroup = () => {
             />
             <Button
               variant="contained"
-              className={"icon"}
+              className={"icon " + (lightTheme ? "" : "darker")}
               onClick={() => {
                 handleClickOpen();
                 // createGroup();

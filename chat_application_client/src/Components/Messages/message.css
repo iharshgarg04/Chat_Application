@@ -3,10 +3,13 @@
     color: white;
     display: flex;
     width: max-content;
-    flex-direction: column;
+    /* flex-direction: column; */
     padding: 10px 15px;
     margin: 10px;
     border-radius: 20px;
+    gap: 12px;
+    height: 32px;
+    justify-content: flex-end;
 }
 
 .message-self{
@@ -74,4 +77,18 @@
     font-weight: 400;
     padding: 3px 0px;
     font-size: 1.2rem;
+}
+.darkergreen{
+    background-color: #0E8388;
+}
+.msg-contime{
+    display: flex;
+    gap: 11px;
+    justify-content: space-between;
+}
+.msg-timestamp{
+    display: flex;
+    justify-content: end;
+    align-self: end;
+    font-size: 12px;
 }

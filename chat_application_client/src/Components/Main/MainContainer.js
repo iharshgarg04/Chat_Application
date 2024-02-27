@@ -8,10 +8,12 @@ import Navbar from '../../pages/Navbar/Navbar'
 export const myContext = createContext();
 const MainContainer = () => {
   const [refresh, setRefresh] = useState(true);
+  const [notification, setNotification] = useState([]);
+  const [chatcontext , setChatcontext] = useState();
   return (
     <div className='main-container'>
       
-      <myContext.Provider value={{refresh:refresh,setRefresh:setRefresh}} >
+      <myContext.Provider value={{refresh:refresh,setRefresh:setRefresh,notification:notification,setNotification:setNotification,chatcontext:chatcontext,setChatcontext:setChatcontext}} >
         <SideBar/>
           <Outlet/>
       </myContext.Provider>

@@ -9,6 +9,7 @@
 }
 
 .g-header{
+    padding: 6px;
     display: flex;
     background: #E1E1E1;
     justify-content: space-between;
