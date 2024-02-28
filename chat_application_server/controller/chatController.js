@@ -89,13 +89,28 @@ exports.fetchChats = expressAsyncHandler(async (req, res) => {
 
 exports.createGroupChat = expressAsyncHandler(async(req,res)=>{
   const {name,avatarImage} = req.body;
-  console.log("Hii am groups");
-  console.log(req.body);
+  // console.log("Hii am groups");
+  // console.log(req.body);
   if(!name){
     return res.status(400).send({message : "Data is insufficient"})
   }
 
   try{
+
+    const isPresent = await Chat.find({
+      isGroupChat : true,
+      chatName:name
+    })
+
+    // console.log(isPresent,"hii present");
+
+    if(isPresent.length>0){
+      return res.status(404).json({
+        success:false,
+        message:"Group is Already present"
+      })
+    }
+
     const groupChat = await Chat.create({
       chatName: name,
       users : req.user,
