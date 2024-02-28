@@ -51,28 +51,7 @@ const SignupForm = () => {
     }else{
       toast.error("Error while sending otp");
     }
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:5000/user/signup/",
-    //     formdata
-    //   );
 
-    //   console.log(response);
-    //   if (response.status === 200) {
-    //     toast.success("Signup Successful");
-    //     Cookies.set("userData", JSON.stringify(response),{expires: 7 });
-    //     navigate("/app/welcome");
-    //   } else {
-    //     toast.error("Signup failed. Please try again.");
-    //   }
-
-    // } catch (error) {
-    //   console.log(error);
-    //   if(error.response.status=== 400){
-    //     toast.error("User with this email or username already exits");
-    //   }
-    //   setLoading(false);
-    // }
   };
   
   const generateAvatar = useCallback(async () => {

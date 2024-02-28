@@ -48,7 +48,7 @@ const ChatArea = () => {
           Authorization: `Bearer ${userData.data.token}`,
         },
       };
-
+      setloaded(false);
       const { data } = await axios.get(
         `${process.env.REACT_APP_DEPLOYMENT_URL}/message/` + chat_id,
         config
@@ -57,6 +57,7 @@ const ChatArea = () => {
       setloaded(true);
       socket.emit("join chat", chat_id);
     }catch(error) {
+      setloaded(true);
       toast.error("Error while fetching");
     }
   };
@@ -95,7 +96,7 @@ const ChatArea = () => {
   useEffect(() => {
     fetchMessages();
     selectedChat = chatcontext;
-  }, [chatcontext,refresh,userData.data.token]);
+  }, [chatcontext,userData.data.token]);
  
 
   useEffect(() => {

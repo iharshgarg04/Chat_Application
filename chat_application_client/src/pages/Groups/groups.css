@@ -1,4 +1,6 @@
 .groups-container{
+    display: flex;
+    flex-direction: column;
     flex: 3;
     margin-top: 11px;
     border-radius: 10px;
@@ -9,6 +11,7 @@
 }
 
 .g-header{
+    flex: 1;
     padding: 6px;
     display: flex;
     background: #E1E1E1;
@@ -29,8 +32,18 @@
     width: 80%;
     margin: 10px auto;
 }
+.searchback{
+    flex: 0.5;
+}
 
+.groups-container{
+    flex: 10;
+    overflow-y: scroll;
+}
 
+.groups-container::-webkit-scrollbar{
+    display: none;
+}
 
 .b-search input{
     width: 100%;

@@ -16,10 +16,14 @@ import { useAvatar } from "../hooks/useAvatar";
 import AvatarUploader from "../AvatarUploader";
 import { myContext } from "../Main/MainContainer";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const Creategroup = () => {
-  const lightTheme= useSelector((state)=>state.themeKey);
+  const lightTheme = useSelector((state) => state.themeKey);
   const userData = JSON.parse(Cookies.get("userData"));
+  const [loading, setLoading] = useState(false);
+
   if (!userData) {
     console.log("user not authenticates");
   }
@@ -27,7 +31,7 @@ const Creategroup = () => {
   const { refresh, setRefresh } = useContext(myContext);
 
   const [groupName, setGroupName] = useState({
-    name : "",
+    name: "",
     avatarImage: "",
   });
 
@@ -51,15 +55,15 @@ const Creategroup = () => {
     }));
   };
 
-  const handleGenerate = (e)=>{
+  const handleGenerate = (e) => {
     e.preventDefault();
     e.stopPropagation();
     generateAvatar();
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     generateAvatar();
-  },[]);
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,23 +73,33 @@ const Creategroup = () => {
     setOpen(false);
   };
 
-  const createGroups =async() => {
+  const createGroups = async () => {
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_DEPLOYMENT_URL}/chat/createGroup`,
+        {
+          name: groupName.name,
+          avatarImage: groupName.avatarImage,
+        },
+        config
+      );
+      if (response.status === 200) {
+        setLoading(false);
+        setRefresh(!refresh);
+        toast.success("group created successfully");
+      }
+    } catch (error) {
+      setLoading(false);
 
-    const response = await axios.post(
-      `${process.env.REACT_APP_DEPLOYMENT_URL}/chat/createGroup`,
-      {
-        name:groupName.name,
-        avatarImage:groupName.avatarImage,
-      },
-      config
-    )
-    if(response.status===200){
-      setRefresh(!refresh);
+      if (error.response.status === 404) {
+        toast.error("Group is already present with this username");
+      } else toast.error("error while creating group");
     }
   };
 
@@ -112,7 +126,7 @@ const Creategroup = () => {
             <Button
               onClick={() => {
                 createGroups();
-                setRefresh(!refresh)
+                setRefresh(!refresh);
                 handleClose();
               }}
               autoFocus
@@ -122,44 +136,60 @@ const Creategroup = () => {
           </DialogActions>
         </Dialog>
       </div>
-      <div className={"createGroups-container "+ (lightTheme ? "" : "dark borderdark")}>
-        <div className={"createGroups-box "+ (lightTheme ? "" : "darkerbox")}>
-          <div className={(lightTheme ? "" : "darkerbox")}>
-            <h1>Enter Group Name</h1>
-          </div>
-          <div className="creategroupInput">
-            <input
-              onChange={handleInputChange}
-              name="name"
-              placeholder="Group Name"
-              className={"search-box " + (lightTheme ? "" : "")}
-            />
-            <AvatarUploader
-              error={avatarError}
-              isLoading={avatarLoading}
-              onGenerate={handleGenerate}
-              avatar={groupName.avatarImage}
-            />
-            <Button
-              variant="contained"
-              className={"icon " + (lightTheme ? "" : "darker")}
-              onClick={() => {
-                handleClickOpen();
-                // createGroup();
-              }}
-              sx={{
-                backgroundColor: "#e8505b",
-                padding: "10px 10px",
-                "&:hover": {
+
+      {loading ? (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+         <CircularProgress color="secondary" variant="indeterminate" />
+        </Backdrop>
+      ) : (
+        <div
+          className={
+            "createGroups-container " + (lightTheme ? "" : "dark borderdark")
+          }
+        >
+          <div
+            className={"createGroups-box " + (lightTheme ? "" : "darkerbox")}
+          >
+            <div className={lightTheme ? "" : "darkerbox"}>
+              <h1>Enter Group Name</h1>
+            </div>
+            <div className="creategroupInput">
+              <input
+                onChange={handleInputChange}
+                name="name"
+                placeholder="Group Name"
+                className={"search-box " + (lightTheme ? "" : "")}
+              />
+              <AvatarUploader
+                error={avatarError}
+                isLoading={avatarLoading}
+                onGenerate={handleGenerate}
+                avatar={groupName.avatarImage}
+              />
+              <Button
+                variant="contained"
+                className={"icon " + (lightTheme ? "" : "darker")}
+                onClick={() => {
+                  handleClickOpen();
+                  // createGroup();
+                }}
+                sx={{
                   backgroundColor: "#e8505b",
-                },
-              }}
-            >
-              Create Group
-            </Button>
+                  padding: "10px 10px",
+                  "&:hover": {
+                    backgroundColor: "#e8505b",
+                  },
+                }}
+              >
+                Create Group
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
