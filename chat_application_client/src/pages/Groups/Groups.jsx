@@ -97,7 +97,7 @@ const Groups = () => {
           />
         </div>
 
-        <div className="groups-container">
+        <div className="groups-container-list">
         {loading ? (
           <div style={{display:"flex" , justifyContent:"center" , alignItems:"center",height:"100%" , width:"100%" }}>
             <CircularProgress className="circulareProgress" color="secondary" variant="indeterminate"  />

@@ -36,12 +36,12 @@
     flex: 0.5;
 }
 
-.groups-container{
+.groups-container-list{
     flex: 10;
     overflow-y: scroll;
 }
 
-.groups-container::-webkit-scrollbar{
+.groups-container-list::-webkit-scrollbar{
     display: none;
 }
 
