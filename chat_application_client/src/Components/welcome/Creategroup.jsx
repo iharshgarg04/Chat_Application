@@ -77,7 +77,7 @@ const Creategroup = () => {
     };
 
     const response = await axios.post(
-      "http://localhost:5000/chat/createGroup",
+      `${process.env.REACT_APP_DEPLOYMENT_URL}/chat/createGroup`,
       {
         name:groupName.name,
         avatarImage:groupName.avatarImage,

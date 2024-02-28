@@ -65,7 +65,7 @@ const SideBar = () => {
       },
     };
     const response = axios
-      .get(`http://localhost:5000/chat?search=${searchquerry}`, config)
+      .get(`${process.env.REACT_APP_DEPLOYMENT_URL}/chat?search=${searchquerry}`, config)
       .then((response) => {
         console.log("Data refresed in sidebar", response.data);
         console.log("hi i am noti" , notification)

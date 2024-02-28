@@ -25,6 +25,7 @@ const Groups = () => {
 
   useEffect(() => {
     console.log("user Refered");
+    // console.log(`${process.env.REACT_APP_DEPLOYMENT_URL}`);
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
@@ -33,7 +34,7 @@ const Groups = () => {
 
      axios
       .get(
-        `http://localhost:5000/chat/fetchGroups?search=${searchquerry}`,
+        `${process.env.REACT_APP_DEPLOYMENT_URL}/chat/fetchGroups?search=${searchquerry}`,
         config
       )
       .then((data) => {

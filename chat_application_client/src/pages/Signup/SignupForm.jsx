@@ -36,7 +36,7 @@ const SignupForm = () => {
     }
     dispatch(setSignupData(signupData));
     setLoading(true);
-    const response = await axios.post("http://localhost:5000/user/otp",formdata);
+    const response = await axios.post(`${process.env.REACT_APP_DEPLOYMENT_URL}/user/otp`,formdata);
     if(response.status===200){
       console.log("OTP is donr from client side");
       toast.success("Otp send successfuly");

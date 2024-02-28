@@ -23,7 +23,7 @@ const Conversationuser = () => {
           },
         };
         const response = axios
-          .get(`http://localhost:5000/chat`, config)
+          .get(`${process.env.REACT_APP_DEPLOYMENT_URL}/chat`, config)
           .then((response) => {
             console.log("Data refresed in sidebar", response.data);
             console.log("hi i am noti" , notification)

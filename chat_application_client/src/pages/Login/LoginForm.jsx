@@ -31,7 +31,7 @@ const LoginForm = () => {
     try{
 
       const response = await axios.post(
-        "http://localhost:5000/user/login",
+        `${process.env.REACT_APP_DEPLOYMENT_URL}/user/login`,
         formdata
       )
 

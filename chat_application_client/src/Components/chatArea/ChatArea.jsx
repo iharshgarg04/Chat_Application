@@ -17,7 +17,7 @@ import image from "../../assests/doodle.jpg";
 import SeeUsers from "../SeeUsers.jsx";
 
 var socket , selectedChat;
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = `${process.env.REACT_APP_DEPLOYMENT_URL}`;
 
 const ChatArea = () => {
   // const lightTheme = useSelector((state) => state.themeKey);
@@ -50,7 +50,7 @@ const ChatArea = () => {
       };
 
       const { data } = await axios.get(
-        "http://localhost:5000/message/" + chat_id,
+        `${process.env.REACT_APP_DEPLOYMENT_URL}/message/` + chat_id,
         config
       );
       setAllMessages(data);
@@ -71,7 +71,7 @@ const ChatArea = () => {
     setMessageContent("");
 
     const { data } = await axios.post(
-      "http://localhost:5000/message/",
+      `${process.env.REACT_APP_DEPLOYMENT_URL}/message/`,
       {
         content: messageContent,
         chatId: chatcontext || chat_id,

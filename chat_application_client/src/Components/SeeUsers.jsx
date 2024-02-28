@@ -69,7 +69,7 @@ const SeeUsers = ({ handleOpen, handleClose, open, name }) => {
 
       axios
         .get(
-          `http://localhost:5000/user/fetchAllUsers?search=${search}`,
+          `${process.env.REACT_APP_DEPLOYMENT_URL}/user/fetchAllUsers?search=${search}`,
           config
         )
         .then((data) => {
@@ -103,7 +103,7 @@ const SeeUsers = ({ handleOpen, handleClose, open, name }) => {
         },
       };
       const response = await axios.put(
-        "http://localhost:5000/chat/leaveGroup",
+        `${process.env.REACT_APP_DEPLOYMENT_URL}/chat/leaveGroup`,
         {
           chat_id: chatcontext._id,
           user_id: userRemove._id,
@@ -166,7 +166,7 @@ const SeeUsers = ({ handleOpen, handleClose, open, name }) => {
       };
 
       const { data } = await axios.put(
-        `http://localhost:5000/chat/addUsers`,
+        `${process.env.REACT_APP_DEPLOYMENT_URL}/chat/addUsers`,
         {
           chatId: chatcontext._id,
           userId: userToAdd._id,

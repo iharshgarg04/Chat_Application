@@ -35,7 +35,7 @@ const Users = () => {
         }
     }
 
-    axios.get(`http://localhost:5000/user/fetchAllUsers?search=${searchquerry}`,config).then((data)=>{
+    axios.get(`${process.env.REACT_APP_DEPLOYMENT_URL}/user/fetchAllUsers?search=${searchquerry}`,config).then((data)=>{
         console.log("User refresed in user panel");
         setusers(data.data);
     })
@@ -81,7 +81,7 @@ const Users = () => {
             };
 
             axios.post(
-              "http://localhost:5000/chat/",{
+              `${process.env.REACT_APP_DEPLOYMENT_URL}/chat/`,{
                 userId:user._id,
                 name:users.name
               },

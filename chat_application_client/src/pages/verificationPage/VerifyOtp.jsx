@@ -16,7 +16,7 @@ const VerifyOtp = () => {
   const handleSubmit = async(e)=>{
     e.preventDefault();
     try{
-        const response = await axios.post("http://localhost:5000/user/signup/",{
+        const response = await axios.post(`${process.env.REACT_APP_DEPLOYMENT_URL}/user/signup/`,{
             name,
             email,
             password,
