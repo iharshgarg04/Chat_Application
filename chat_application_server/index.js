@@ -67,10 +67,7 @@ io.on("connection", (socket) => {
     socket.join(room);
   });
 
-  socket.on("typing",(room)=>{
-    socket.to(room).emit("typing")
-    console.log(room,"hii room")
-});
+  socket.on("typing",(room)=> socket.to(room).emit("typing"));
   socket.on("stop typing",(room)=>socket.to(room).emit("stop typing"));
 
   socket.on("new message", (newMessageStatus) => {

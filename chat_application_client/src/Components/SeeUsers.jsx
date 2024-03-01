@@ -326,7 +326,10 @@ const SeeUsers = ({ handleOpen, handleClose, open, name }) => {
                     color: "black",
                   },
                 }}
-                onClick={() => handleLeave(userData.data._id)}
+                onClick={() => {
+                  handleLeave(userData.data)
+                  navigate("/app/welcome");
+                }}
               >
                 Leave Chat
               </Button>
