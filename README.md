@@ -38,9 +38,9 @@ To run this application locally, follow these steps:
      npm install
   4. set up the environment variables
       
-      -JWT_SECRET
-      -MONGO_URL
-      -MAIL_HOST
+      - JWT_SECRET
+      - MONGO_URL
+      - MAIL_HOST
       - MAIL_PASS
       - PASSWORD
       - PORT
