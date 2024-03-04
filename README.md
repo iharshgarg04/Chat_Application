@@ -37,31 +37,40 @@ To run this application locally, follow these steps:
       ```bash
      npm install
   4. set up the environment variables
-  5. start the application
+      
+      -JWT_SECRET
+      -MONGO_URL
+      -MAIL_HOST
+      - MAIL_PASS
+      - PASSWORD
+      - PORT
+
+  6. start the application
        ```bash
      npm start
 
-  6. Naviagte to server directory
+  7. Naviagte to server directory
        ```bash
        cd chat_application_server
-  7. Install dependencies
+  8. Install dependencies
       ```bash
       npm install
-  8. Start the server
+  9. Start the server
       ```bash
       npm start
 
    ## Usage
    1. Access the application through the provided URL or locally on http://localhost:3000 (or another specified port).
-    2. Sign up or log in to your account.
+   2. Sign up or log in to your account.
    3. Create or join a chat room.
-    4. Start sending messages and enjoy real-time communication.
+   4. Start sending messages and enjoy real-time communication.
 
+ 
   ## Technologies used
-    - Node js
-    - Express js
-    - React Js
-    -Mongo db
-    - Web sockets
+   - Node js
+   - Express js
+   - React Js
+   - Mongo db
+   - Web sockets
   
 
