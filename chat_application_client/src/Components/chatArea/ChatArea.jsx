@@ -17,6 +17,7 @@ import image from "../../assests/doodle.jpg";
 import Lottie from "react-lottie";
 import SeeUsers from "../SeeUsers.jsx";
 import animationData from "../../assests/Animation - 1709298838619.json";
+import _ from 'lodash';
 
 var socket, selectedChat;
 const ENDPOINT = `${process.env.REACT_APP_DEPLOYMENT_URL}`;
@@ -171,7 +172,9 @@ const ChatArea = () => {
     setOpen(false);
   };
 
-  const typingHandler =(e)=>{
+  let istypingTimeout;
+
+  const typingHandler = (e)=>{
     setMessageContent(e.target.value);
     if(!socketConnectionStatus){
       return;
@@ -184,16 +187,19 @@ const ChatArea = () => {
 
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
+    if (istypingTimeout) {
+      clearTimeout(istypingTimeout);
+    }
 
-    setTimeout(() => {
+    istypingTimeout = setTimeout(() => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && istyping) {
         socket.emit("stop typing", chat_id);
+        console.log("Event is emits");
         setIstyping(false);
       }
     }, timerLength);
-
   }
 
   if (!loaded) {
@@ -206,6 +212,7 @@ const ChatArea = () => {
           display: "flex",
           flexDirection: "column",
           gap: "10px",
+          flex:"3"
         }}
       >
         <Skeleton
@@ -273,7 +280,7 @@ const ChatArea = () => {
             })}
         </div>
         <div ref={messagesEndRef} className="BOTTOM" />
-        {typing ? (
+        {typing && (
           <div style={{display:"flex" , padding:"0px 10px"}}>
             <div className="message-other-icon">
               <img
@@ -290,8 +297,6 @@ const ChatArea = () => {
               style={{ marginBottom: 10, marginLeft: 10 }}
             />
           </div>
-        ) : (
-          <></>
         )}
         <div className={"text-input-area " + (lighttheme ? "" : "darker")}>
           <input

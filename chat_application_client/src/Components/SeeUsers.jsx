@@ -329,6 +329,7 @@ const SeeUsers = ({ handleOpen, handleClose, open, name }) => {
                 onClick={() => {
                   handleLeave(userData.data)
                   navigate("/app/welcome");
+                  setRefresh(!refresh);
                 }}
               >
                 Leave Chat
